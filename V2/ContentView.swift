@@ -2,6 +2,8 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var navigateToQuestionnaire = false
+    @State private var navigateToChartView = false
+    @State private var chartScores: [(Int, Date)] = [] // State to hold chart data
     
     var body: some View {
         NavigationView {
@@ -30,9 +32,10 @@ struct ContentView: View {
                     Spacer()
                     
                     Button(action: {
-                        // Action for Sign up
+                        loadChartData() // Load stored data before navigation
+                        navigateToChartView = true // Trigger navigation to ChartView
                     }) {
-                        Text("Sign up")
+                        Text("Progress Report")
                             .frame(maxWidth: .infinity)
                             .padding()
                             .background(Color.gray.opacity(0.2))
@@ -43,7 +46,7 @@ struct ContentView: View {
                     Button(action: {
                         navigateToQuestionnaire = true
                     }) {
-                        Text("Log in")
+                        Text("Launch Memory Test")
                             .frame(maxWidth: .infinity)
                             .padding()
                             .background(Color.gray.opacity(0.2))
@@ -60,6 +63,22 @@ struct ContentView: View {
                     EmptyView()
                 }
             )
+            .background(
+                NavigationLink(destination: ChartView(scores: chartScores), isActive: $navigateToChartView) {
+                    EmptyView()
+                }
+            )
+        }
+    }
+    
+    // Function to load past results from UserDefaults
+    func loadChartData() {
+        let results = UserDefaults.standard.array(forKey: "TestResults") as? [[String: Any]] ?? []
+        chartScores = results.compactMap { result in
+            if let score = result["score"] as? Int, let date = result["date"] as? Date {
+                return (score, date)
+            }
+            return nil
         }
     }
 }
