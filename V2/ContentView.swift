@@ -14,14 +14,14 @@ struct ContentView: View {
                     Image("logo")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(width: 200, height: 200)
+                        .frame(width: 250, height: 250)
                         .padding()
                         .background(
                             RoundedRectangle(cornerRadius: 10)
                                 .fill(Color.white)
                         )
                     
-                    Text("Welcome")
+                    Text("Welcome,\n Spandan.")
                         .font(.title)
                         .fontWeight(.bold)
                     

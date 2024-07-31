@@ -1,30 +1,25 @@
 import SwiftUI
 
 struct QuestionnaireView: View {
-    @State private var selectedAnswers: [Int?] = Array(repeating: nil, count: 15)
-    @State private var navigateToResult = false // State to control navigation
-    @State private var trueCount: Int = 0 // To store the count of True answers
-    @State private var resultMessage: String = "" // To store the result message
+    @State private var selectedAnswers: [Int?] = Array(repeating: nil, count: 11) // Adjust count based on number of questions
+    @State private var navigateToResult = false
+    @State private var score: Int = 0 // To store the MMSE score
+    @State private var resultMessage: String = ""
     
+    // MMSE-style questions
     let questions = [
-        "From time to time, I forget what day of the week it is.",
-        "Sometimes when I’m looking for something, I forget what it is that I’m looking for.",
-        "My friends and family seem to think I’m more forgetful now than I used to be.",
-        "Sometimes I forget the names of my friends.",
-        "It’s hard for me to add two-digit numbers without writing them down.",
-        "I frequently miss appointments because I forget them.",
-        "I rarely feel energetic.",
-        "Small problems upset me more than they once did.",
-        "It’s hard for me to concentrate for even an hour.",
-        "I often misplace my keys, and when I find them, I often can’t remember putting them there.",
-        "I frequently repeat myself.",
-        "Sometime I get lost, even when I’m driving somewhere I’ve been before.",
-        "Sometimes I forget the point I’m trying to make.",
-        "To feel mentally sharp, I depend upon caffeine.",
-        "It takes longer for me to learn things than it used to."
+        "What is today's date? (Day, Month, Year)",
+        "What is the name of this place? (Current location)",
+        "Please repeat these three words: Apple, Table, Penny.",
+        "Count backward from 100 by sevens (e.g., 93, 86, 79...).",
+        "What were the three words I asked you to remember?",
+        "Please name these objects: (Provide images or show objects).",
+        "Follow this command: Take this paper in your right hand, fold it in half, and put it on the floor.",
+        "Write a sentence of your choice.",
+        "Draw a clock face with the hands showing 10 past 11.",
+        "What is 7 + 8?",
+        "Repeat this phrase: 'No ifs, ands, or buts.'"
     ]
-    
-    let answers = Array(repeating: ["True", "False"], count: 15)
     
     var body: some View {
         NavigationView {
@@ -39,42 +34,51 @@ struct QuestionnaireView: View {
                             Text(questions[index])
                                 .font(.headline)
                             
-                            ForEach(0..<answers[index].count, id: \.self) { answerIndex in
-                                Button(action: {
-                                    selectedAnswers[index] = answerIndex
-                                }) {
-                                    HStack {
-                                        Text(answers[index][answerIndex])
-                                        Spacer()
-                                        if selectedAnswers[index] == answerIndex {
-                                            Image(systemName: "checkmark")
-                                                .foregroundColor(.blue)
+                            // Use different UI elements based on question type
+                            if index == 1 {
+                                // For questions requiring user input (e.g., date, location)
+                                TextField("Enter your answer here", text: .constant(""))
+                                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                                    .padding()
+                            } else if index == 3 {
+                                // For questions requiring a number input
+                                TextField("Enter your answer here", text: .constant(""))
+                                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                                    .padding()
+                            } else if index == 8 {
+                                // For drawing tasks (you might use an image or a separate view)
+                                Text("Draw a clock face on paper.")
+                                    .padding()
+                            } else {
+                                // For simple multiple-choice or text-based questions
+                                ForEach(0..<2) { answerIndex in
+                                    Button(action: {
+                                        selectedAnswers[index] = answerIndex
+                                    }) {
+                                        HStack {
+                                            Text(answerIndex == 0 ? "Correct" : "Incorrect")
+                                            Spacer()
+                                            if selectedAnswers[index] == answerIndex {
+                                                Image(systemName: "checkmark")
+                                                    .foregroundColor(.blue)
+                                            }
                                         }
                                     }
+                                    .padding()
+                                    .background(Color.gray.opacity(0.1))
+                                    .cornerRadius(8)
                                 }
-                                .padding()
-                                .background(Color.gray.opacity(0.1))
-                                .cornerRadius(8)
                             }
                         }
                         .padding(.bottom)
                     }
                     
                     Button(action: {
-                        // Count the number of "True" answers
-                        trueCount = selectedAnswers.compactMap { $0 }.filter { $0 == 0 }.count
+                        // Calculate the score based on answers
+                        calculateScore()
                         
-                        // Set the result message based on the count
-                        switch trueCount {
-                        case 12...:
-                            resultMessage = "Dangerously high: Please visit a physician soon."
-                        case 9...11:
-                            resultMessage = "At Risk: Check your diet, yoga and meditation might be good."
-                        case 5...8:
-                            resultMessage = "Normal: Your brain is functioning okay."
-                        default:
-                            resultMessage = "Your memory seems to be in good shape!"
-                        }
+                        // Set the result message based on the score
+                        resultMessage = determineResultMessage(score)
                         
                         // Navigate to the result view
                         navigateToResult = true
@@ -90,16 +94,32 @@ struct QuestionnaireView: View {
                     
                     // Navigation link to the result view
                     NavigationLink(
-                        destination: ResultView(trueCount: trueCount, resultMessage: resultMessage),
+                        destination: ResultView(trueCount: score, resultMessage: resultMessage),
                         isActive: $navigateToResult
                     ) {
                         EmptyView()
                     }
-                    .hidden() // Hide the link
+                    .hidden()
                 }
                 .padding()
             }
             .navigationTitle("Memory Assessment")
+        }
+    }
+    
+    func calculateScore() {
+        // Implement scoring logic based on the selected answers
+        score = selectedAnswers.compactMap { $0 }.count
+    }
+    
+    func determineResultMessage(_ score: Int) -> String {
+        switch score {
+        case 27...30:
+            return "Your cognitive function is normal."
+        case 20...26:
+            return "You might have some cognitive impairment."
+        default:
+            return "You should consult a healthcare professional."
         }
     }
 }
@@ -109,3 +129,4 @@ struct QuestionnaireView_Previews: PreviewProvider {
         QuestionnaireView()
     }
 }
+
