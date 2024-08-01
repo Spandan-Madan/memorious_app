@@ -1,12 +1,80 @@
 import SwiftUI
+import AVFoundation
+import SDWebImageSwiftUI
+
+class AudioRecorder: ObservableObject {
+    @Published var isRecording = false
+    private var audioRecorder: AVAudioRecorder?
+    
+    func startRecording(for questionIndex: Int) {
+        let audioSession = AVAudioSession.sharedInstance()
+        do {
+            try audioSession.setCategory(.playAndRecord, mode: .default)
+            try audioSession.setActive(true)
+            
+            let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            let audioFilename = documentsPath.appendingPathComponent("answer_\(questionIndex).m4a")
+            
+            let settings = [
+                AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
+                AVSampleRateKey: 44100,
+                AVNumberOfChannelsKey: 2,
+                AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
+            ]
+            
+            audioRecorder = try AVAudioRecorder(url: audioFilename, settings: settings)
+            audioRecorder?.record()
+            
+            isRecording = true
+        } catch {
+            print("Failed to set up recording session")
+        }
+    }
+    
+    func stopRecording() {
+        audioRecorder?.stop()
+        isRecording = false
+    }
+}
+
+class AudioPlayer: ObservableObject {
+    @Published var isPlaying = false
+    private var audioPlayer: AVAudioPlayer?
+    
+    func startPlayback(for questionIndex: Int) {
+        let audioSession = AVAudioSession.sharedInstance()
+        do {
+            try audioSession.setCategory(.playback, mode: .default)
+            
+            let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            let audioFilename = documentsPath.appendingPathComponent("answer_\(questionIndex).m4a")
+            
+            audioPlayer = try AVAudioPlayer(contentsOf: audioFilename)
+            audioPlayer?.play()
+            
+            isPlaying = true
+        } catch {
+            print("Playback failed")
+        }
+    }
+    
+    func stopPlayback() {
+        audioPlayer?.stop()
+        isPlaying = false
+    }
+}
 
 struct QuestionnaireView: View {
-    @State private var selectedAnswers: [Int?] = Array(repeating: nil, count: 11) // Adjust count based on number of questions
+    @State private var selectedAnswers: [Int?] = Array(repeating: nil, count: 11)
     @State private var navigateToResult = false
-    @State private var score: Int = 0 // To store the MMSE score
+    @State private var score: Int = 0
     @State private var resultMessage: String = ""
-    
-    // MMSE-style questions
+    @StateObject private var audioRecorder = AudioRecorder()
+    @StateObject private var audioPlayer = AudioPlayer()
+    @State private var recordingQuestionIndex: Int? = nil
+    @State private var playingQuestionIndex: Int? = nil
+    @State private var textResponses: [String] = Array(repeating: "", count: 11)
+
     let questions = [
         "What is today's date? (Day, Month, Year)",
         "What is the name of this place? (Current location)",
@@ -14,9 +82,7 @@ struct QuestionnaireView: View {
         "Count backward from 100 by sevens (e.g., 93, 86, 79...).",
         "What were the three words I asked you to remember?",
         "Please name these objects: (Provide images or show objects).",
-        "Follow this command: Take this paper in your right hand, fold it in half, and put it on the floor.",
         "Write a sentence of your choice.",
-        "Draw a clock face with the hands showing 10 past 11.",
         "What is 7 + 8?",
         "Repeat this phrase: 'No ifs, ands, or buts.'"
     ]
@@ -34,23 +100,68 @@ struct QuestionnaireView: View {
                             Text(questions[index])
                                 .font(.headline)
                             
-                            // Use different UI elements based on question type
-                            if index == 1 {
-                                // For questions requiring user input (e.g., date, location)
-                                TextField("Enter your answer here", text: .constant(""))
+                            if index == 5 { // For the question with images
+                                VStack {
+                                    HStack {
+                                        WebImage(url: URL(string: "https://thumbs.dreamstime.com/b/house-icon-24661687.jpg"))
+                                            .resizable()
+                                            .frame(width: 100, height: 100)
+                                        WebImage(url: URL(string: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Banana-Single.jpg/1200px-Banana-Single.jpg"))
+                                            .resizable()
+                                            .frame(width: 100, height: 100)
+                                        WebImage(url: URL(string: "https://png.pngtree.com/png-clipart/20230512/original/pngtree-isolated-cat-on-white-background-png-image_9158356.png"))
+                                            .resizable()
+                                            .frame(width: 100, height: 100)
+                                    }
+                                    TextField("Enter your answer here", text: $textResponses[index])
+                                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                                        .padding()
+                                }
+                            } else if [2, 3, 4, 8].contains(index) { // Audio recording for questions 3, 4, 5, and 9
+                                HStack {
+                                    Button(action: {
+                                        if audioRecorder.isRecording && recordingQuestionIndex == index {
+                                            audioRecorder.stopRecording()
+                                            recordingQuestionIndex = nil
+                                        } else {
+                                            if audioRecorder.isRecording {
+                                                audioRecorder.stopRecording()
+                                            }
+                                            audioRecorder.startRecording(for: index)
+                                            recordingQuestionIndex = index
+                                        }
+                                    }) {
+                                        Text(audioRecorder.isRecording && recordingQuestionIndex == index ? "Stop Recording" : "Start Recording")
+                                            .padding()
+                                            .background(audioRecorder.isRecording && recordingQuestionIndex == index ? Color.red : Color.blue)
+                                            .foregroundColor(.white)
+                                            .cornerRadius(10)
+                                    }
+                                    
+                                    Button(action: {
+                                        if audioPlayer.isPlaying && playingQuestionIndex == index {
+                                            audioPlayer.stopPlayback()
+                                            playingQuestionIndex = nil
+                                        } else {
+                                            if audioPlayer.isPlaying {
+                                                audioPlayer.stopPlayback()
+                                            }
+                                            audioPlayer.startPlayback(for: index)
+                                            playingQuestionIndex = index
+                                        }
+                                    }) {
+                                        Text(audioPlayer.isPlaying && playingQuestionIndex == index ? "Stop Playback" : "Play Recording")
+                                            .padding()
+                                            .background(Color.green)
+                                            .foregroundColor(.white)
+                                            .cornerRadius(10)
+                                    }
+                                }
+                            } else if index == 1 || index == 0 || index == 6 || index == 7 {
+                                TextField("Enter your answer here", text: $textResponses[index])
                                     .textFieldStyle(RoundedBorderTextFieldStyle())
-                                    .padding()
-                            } else if index == 3 {
-                                // For questions requiring a number input
-                                TextField("Enter your answer here", text: .constant(""))
-                                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                                    .padding()
-                            } else if index == 8 {
-                                // For drawing tasks (you might use an image or a separate view)
-                                Text("Draw a clock face on paper.")
                                     .padding()
                             } else {
-                                // For simple multiple-choice or text-based questions
                                 ForEach(0..<2) { answerIndex in
                                     Button(action: {
                                         selectedAnswers[index] = answerIndex
@@ -74,13 +185,8 @@ struct QuestionnaireView: View {
                     }
                     
                     Button(action: {
-                        // Calculate the score based on answers
                         calculateScore()
-                        
-                        // Set the result message based on the score
                         resultMessage = determineResultMessage(score)
-                        
-                        // Navigate to the result view
                         navigateToResult = true
                     }) {
                         Text("Submit Answers")
@@ -92,7 +198,6 @@ struct QuestionnaireView: View {
                     }
                     .padding(.top)
                     
-                    // Navigation link to the result view
                     NavigationLink(
                         destination: ResultView(trueCount: score, resultMessage: resultMessage),
                         isActive: $navigateToResult
@@ -108,8 +213,8 @@ struct QuestionnaireView: View {
     }
     
     func calculateScore() {
-        // Implement scoring logic based on the selected answers
         score = selectedAnswers.compactMap { $0 }.count
+        // Note: You may want to add logic to evaluate the audio recordings and text responses
     }
     
     func determineResultMessage(_ score: Int) -> String {
@@ -129,4 +234,3 @@ struct QuestionnaireView_Previews: PreviewProvider {
         QuestionnaireView()
     }
 }
-
