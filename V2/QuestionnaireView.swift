@@ -109,7 +109,7 @@ struct QuestionnaireView: View {
                                         WebImage(url: URL(string: "https://raw.githubusercontent.com/Spandan-Madan/memorious_app/main/V2/noun-cat-6992177.png"))
                                             .resizable()
                                             .frame(width: 100, height: 100)
-                                        WebImage(url: URL(string: "https://raw.githubusercontent.com/Spandan-Madan/memorious_app/main/V2/noun-coffee-6706442.png"))
+                                        WebImage(url: URL(string: "https://github.com/Spandan-Madan/memorious_app/blob/main/noun-coffee-6706442.png?raw=true"))
                                             .resizable()
                                             .frame(width: 100, height: 100)
                                     }
