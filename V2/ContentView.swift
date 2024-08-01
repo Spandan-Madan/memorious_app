@@ -1,10 +1,12 @@
 import SwiftUI
+import AVFoundation
 
 struct ContentView: View {
     @State private var navigateToQuestionnaire = false
     @State private var navigateToChartView = false
     @State private var chartScores: [(Int, Date)] = [] // State to hold chart data
-    
+    @State private var showAlert = false // State to show alert if permission is denied
+
     var body: some View {
         NavigationView {
             ZStack {
@@ -32,8 +34,10 @@ struct ContentView: View {
                     Spacer()
                     
                     Button(action: {
-                        loadChartData() // Load stored data before navigation
-                        navigateToChartView = true // Trigger navigation to ChartView
+                        requestMicrophonePermission {
+                            loadChartData() // Load stored data before navigation
+                            navigateToChartView = true // Trigger navigation to ChartView
+                        }
                     }) {
                         Text("Progress Report")
                             .frame(maxWidth: .infinity)
@@ -44,7 +48,9 @@ struct ContentView: View {
                     }
                     
                     Button(action: {
-                        navigateToQuestionnaire = true
+                        requestMicrophonePermission {
+                            navigateToQuestionnaire = true
+                        }
                     }) {
                         Text("Launch Memory Test")
                             .frame(maxWidth: .infinity)
@@ -55,6 +61,11 @@ struct ContentView: View {
                     }
                 }
                 .padding()
+                .alert(isPresented: $showAlert) {
+                    Alert(title: Text("Microphone Access Denied"),
+                          message: Text("This app needs access to the microphone to function properly."),
+                          dismissButton: .default(Text("OK")))
+                }
             }
             .navigationTitle("")
             .navigationBarHidden(true)
@@ -81,6 +92,28 @@ struct ContentView: View {
             return nil
         }
     }
+    
+    // Function to request microphone permission
+    private func requestMicrophonePermission(completion: @escaping () -> Void) {
+        #if targetEnvironment(simulator)
+        // Log that we are in the simulator and granting permission automatically
+        print("Simulator detected: granting permission automatically.")
+        DispatchQueue.main.async {
+            completion()
+        }
+        #else
+        AVAudioSession.sharedInstance().requestRecordPermission { granted in
+            DispatchQueue.main.async {
+                print("Permission granted: \(granted)")
+                if granted {
+                    completion()
+                } else {
+                    showAlert = true
+                }
+            }
+        }
+        #endif
+    }
 }
 
 struct ContentView_Previews: PreviewProvider {
@@ -88,3 +121,4 @@ struct ContentView_Previews: PreviewProvider {
         ContentView()
     }
 }
+

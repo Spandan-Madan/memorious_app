@@ -118,43 +118,51 @@ struct QuestionnaireView: View {
                                         .padding()
                                 }
                             } else if [2, 3, 4, 8].contains(index) { // Audio recording for questions 3, 4, 5, and 9
-                                HStack {
-                                    Button(action: {
-                                        if audioRecorder.isRecording && recordingQuestionIndex == index {
-                                            audioRecorder.stopRecording()
-                                            recordingQuestionIndex = nil
-                                        } else {
-                                            if audioRecorder.isRecording {
+                                VStack {
+                                    HStack {
+                                        Spacer()
+                                        Button(action: {
+                                            if audioRecorder.isRecording && recordingQuestionIndex == index {
                                                 audioRecorder.stopRecording()
+                                                recordingQuestionIndex = nil
+                                            } else {
+                                                if audioRecorder.isRecording {
+                                                    audioRecorder.stopRecording()
+                                                }
+                                                audioRecorder.startRecording(for: index)
+                                                recordingQuestionIndex = index
                                             }
-                                            audioRecorder.startRecording(for: index)
-                                            recordingQuestionIndex = index
+                                        }) {
+                                            Text(audioRecorder.isRecording && recordingQuestionIndex == index ? "Stop Recording" : "Start Recording")
+                                                .padding()
+                                                .background(audioRecorder.isRecording && recordingQuestionIndex == index ? Color.red : Color.blue)
+                                                .foregroundColor(.white)
+                                                .cornerRadius(10)
                                         }
-                                    }) {
-                                        Text(audioRecorder.isRecording && recordingQuestionIndex == index ? "Stop Recording" : "Start Recording")
-                                            .padding()
-                                            .background(audioRecorder.isRecording && recordingQuestionIndex == index ? Color.red : Color.blue)
-                                            .foregroundColor(.white)
-                                            .cornerRadius(10)
+                                        Spacer()
                                     }
                                     
-                                    Button(action: {
-                                        if audioPlayer.isPlaying && playingQuestionIndex == index {
-                                            audioPlayer.stopPlayback()
-                                            playingQuestionIndex = nil
-                                        } else {
-                                            if audioPlayer.isPlaying {
+                                    HStack {
+                                        Spacer()
+                                        Button(action: {
+                                            if audioPlayer.isPlaying && playingQuestionIndex == index {
                                                 audioPlayer.stopPlayback()
+                                                playingQuestionIndex = nil
+                                            } else {
+                                                if audioPlayer.isPlaying {
+                                                    audioPlayer.stopPlayback()
+                                                }
+                                                audioPlayer.startPlayback(for: index)
+                                                playingQuestionIndex = index
                                             }
-                                            audioPlayer.startPlayback(for: index)
-                                            playingQuestionIndex = index
+                                        }) {
+                                            Text(audioPlayer.isPlaying && playingQuestionIndex == index ? "Stop Playback" : "Play Recording")
+                                                .padding()
+                                                .background(Color.green)
+                                                .foregroundColor(.white)
+                                                .cornerRadius(10)
                                         }
-                                    }) {
-                                        Text(audioPlayer.isPlaying && playingQuestionIndex == index ? "Stop Playback" : "Play Recording")
-                                            .padding()
-                                            .background(Color.green)
-                                            .foregroundColor(.white)
-                                            .cornerRadius(10)
+                                        Spacer()
                                     }
                                 }
                             } else if index == 1 || index == 0 || index == 6 || index == 7 {
@@ -234,3 +242,4 @@ struct QuestionnaireView_Previews: PreviewProvider {
         QuestionnaireView()
     }
 }
+
