@@ -103,13 +103,13 @@ struct QuestionnaireView: View {
                             if index == 5 { // For the question with images
                                 VStack {
                                     HStack {
-                                        WebImage(url: URL(string: "https://thumbs.dreamstime.com/b/house-icon-24661687.jpg"))
+                                        WebImage(url: URL(string: "https://raw.githubusercontent.com/Spandan-Madan/memorious_app/main/V2/cat.png"))
                                             .resizable()
                                             .frame(width: 100, height: 100)
-                                        WebImage(url: URL(string: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Banana-Single.jpg/1200px-Banana-Single.jpg"))
+                                        WebImage(url: URL(string: "https://raw.githubusercontent.com/Spandan-Madan/memorious_app/main/V2/camera.png"))
                                             .resizable()
                                             .frame(width: 100, height: 100)
-                                        WebImage(url: URL(string: "https://png.pngtree.com/png-clipart/20230512/original/pngtree-isolated-cat-on-white-background-png-image_9158356.png"))
+                                        WebImage(url: URL(string: "https://raw.githubusercontent.com/Spandan-Madan/memorious_app/main/V2/coffee.png"))
                                             .resizable()
                                             .frame(width: 100, height: 100)
                                     }
