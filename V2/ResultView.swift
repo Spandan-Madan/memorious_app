@@ -1,14 +1,14 @@
 import SwiftUI
 
 struct ResultView: View {
-    let trueCount: Int
+    let score: Int
     let resultMessage: String
     
     @State private var scores: [(Int, Date)] = []
     
     var body: some View {
         VStack {
-            Text("Your Score: \(trueCount)")
+            Text("Your Score: \(score)")
                 .font(.largeTitle)
                 .padding()
             
@@ -33,7 +33,7 @@ struct ResultView: View {
     }
     
     func saveResult() {
-        let result = ["score": trueCount, "date": Date()] as [String : Any]
+        let result = ["score": score, "date": Date()] as [String : Any]
         var results = UserDefaults.standard.array(forKey: "TestResults") as? [[String: Any]] ?? []
         results.append(result)
         UserDefaults.standard.set(results, forKey: "TestResults")
@@ -52,7 +52,7 @@ struct ResultView: View {
 
 struct ResultView_Previews: PreviewProvider {
     static var previews: some View {
-        ResultView(trueCount: 10, resultMessage: "At Risk: Check your diet, yoga and meditation might be good.")
+        ResultView(score: 10, resultMessage: "At Risk: Check your diet, yoga and meditation might be good.")
     }
 }
 

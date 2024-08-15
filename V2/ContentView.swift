@@ -1,11 +1,13 @@
 import SwiftUI
 import AVFoundation
+import Speech
 
 struct ContentView: View {
     @State private var navigateToQuestionnaire = false
     @State private var navigateToChartView = false
-    @State private var chartScores: [(Int, Date)] = [] // State to hold chart data
-    @State private var showAlert = false // State to show alert if permission is denied
+    @State private var chartScores: [(Int, Date)] = []
+    @State private var showAlert = false
+    @State private var alertMessage = ""
 
     var body: some View {
         NavigationView {
@@ -34,9 +36,9 @@ struct ContentView: View {
                     Spacer()
                     
                     Button(action: {
-                        requestMicrophonePermission {
-                            loadChartData() // Load stored data before navigation
-                            navigateToChartView = true // Trigger navigation to ChartView
+                        requestPermissions {
+                            loadChartData()
+                            navigateToChartView = true
                         }
                     }) {
                         Text("Progress Report")
@@ -48,7 +50,7 @@ struct ContentView: View {
                     }
                     
                     Button(action: {
-                        requestMicrophonePermission {
+                        requestPermissions {
                             navigateToQuestionnaire = true
                         }
                     }) {
@@ -62,8 +64,8 @@ struct ContentView: View {
                 }
                 .padding()
                 .alert(isPresented: $showAlert) {
-                    Alert(title: Text("Microphone Access Denied"),
-                          message: Text("This app needs access to the microphone to function properly."),
+                    Alert(title: Text("Permission Denied"),
+                          message: Text(alertMessage),
                           dismissButton: .default(Text("OK")))
                 }
             }
@@ -82,7 +84,6 @@ struct ContentView: View {
         }
     }
     
-    // Function to load past results from UserDefaults
     func loadChartData() {
         let results = UserDefaults.standard.array(forKey: "TestResults") as? [[String: Any]] ?? []
         chartScores = results.compactMap { result in
@@ -93,26 +94,45 @@ struct ContentView: View {
         }
     }
     
-    // Function to request microphone permission
-    private func requestMicrophonePermission(completion: @escaping () -> Void) {
+    private func requestPermissions(completion: @escaping () -> Void) {
         #if targetEnvironment(simulator)
-        // Log that we are in the simulator and granting permission automatically
-        print("Simulator detected: granting permission automatically.")
+        print("Simulator detected: granting permissions automatically.")
         DispatchQueue.main.async {
             completion()
         }
         #else
-        AVAudioSession.sharedInstance().requestRecordPermission { granted in
-            DispatchQueue.main.async {
-                print("Permission granted: \(granted)")
-                if granted {
-                    completion()
-                } else {
+        requestMicrophonePermission { micGranted in
+            if micGranted {
+                requestSpeechRecognitionPermission { speechGranted in
+                    DispatchQueue.main.async {
+                        if speechGranted {
+                            completion()
+                        } else {
+                            alertMessage = "This app needs access to speech recognition to function properly."
+                            showAlert = true
+                        }
+                    }
+                }
+            } else {
+                DispatchQueue.main.async {
+                    alertMessage = "This app needs access to the microphone to function properly."
                     showAlert = true
                 }
             }
         }
         #endif
+    }
+    
+    private func requestMicrophonePermission(completion: @escaping (Bool) -> Void) {
+        AVAudioSession.sharedInstance().requestRecordPermission { granted in
+            completion(granted)
+        }
+    }
+    
+    private func requestSpeechRecognitionPermission(completion: @escaping (Bool) -> Void) {
+        SFSpeechRecognizer.requestAuthorization { authStatus in
+            completion(authStatus == .authorized)
+        }
     }
 }
 
@@ -121,4 +141,3 @@ struct ContentView_Previews: PreviewProvider {
         ContentView()
     }
 }
-
