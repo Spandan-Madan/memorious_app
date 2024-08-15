@@ -1,6 +1,7 @@
 import SwiftUI
 import AVFoundation
 import Speech
+import VisionKit
 
 struct ContentView: View {
     @State private var navigateToQuestionnaire = false
@@ -104,10 +105,21 @@ struct ContentView: View {
         requestMicrophonePermission { micGranted in
             if micGranted {
                 requestSpeechRecognitionPermission { speechGranted in
-                    DispatchQueue.main.async {
-                        if speechGranted {
-                            completion()
-                        } else {
+                    if speechGranted {
+                        requestCameraPermission { cameraGranted in
+                            if cameraGranted {
+                                DispatchQueue.main.async {
+                                    completion()
+                                }
+                            } else {
+                                DispatchQueue.main.async {
+                                    alertMessage = "This app needs access to the camera to function properly."
+                                    showAlert = true
+                                }
+                            }
+                        }
+                    } else {
+                        DispatchQueue.main.async {
                             alertMessage = "This app needs access to speech recognition to function properly."
                             showAlert = true
                         }
@@ -133,6 +145,17 @@ struct ContentView: View {
         SFSpeechRecognizer.requestAuthorization { authStatus in
             completion(authStatus == .authorized)
         }
+    }
+    
+    private func requestCameraPermission(completion: @escaping (Bool) -> Void) {
+        AVCaptureDevice.requestAccess(for: .video) { granted in
+            completion(granted)
+        }
+    }
+    
+    private func requestVisionPermission(completion: @escaping (Bool) -> Void) {
+        // No explicit VisionKit permission needed; ensure camera/photo library access is granted
+        completion(true)
     }
 }
 

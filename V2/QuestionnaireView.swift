@@ -2,6 +2,7 @@ import SwiftUI
 import AVFoundation
 import SDWebImageSwiftUI
 import Speech
+import VisionKit
 
 class AudioRecorder: ObservableObject {
     @Published var isRecording = false
@@ -120,6 +121,8 @@ struct QuestionnaireView: View {
     @State private var textResponses: [String] = Array(repeating: "", count: 11)
     @State private var showAlert = false
     @State private var alertMessage = ""
+    @State private var isImagePickerPresented = false
+    @State private var capturedImage: UIImage?
 
     let questions = [
         "What is today's date? (Day, Month, Year)",
@@ -130,7 +133,8 @@ struct QuestionnaireView: View {
         "Please name these objects: (Provide images or show objects).",
         "Write a sentence of your choice.",
         "What is 7 + 8?",
-        "Repeat this phrase: 'No ifs, ands, or buts.'"
+        "Repeat this phrase: 'No ifs, ands, or buts.'",
+        "Take a picture of a Triangle and upload a picture"
     ]
     
     var body: some View {
@@ -210,6 +214,28 @@ struct QuestionnaireView: View {
                                         Spacer()
                                     }
                                 }
+                            } else if index == 9 { // New camera question
+                                VStack {
+                                    if let image = capturedImage {
+                                        Image(uiImage: image)
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(height: 200)
+                                    }
+                                    
+                                    Button(action: {
+                                        isImagePickerPresented = true
+                                    }) {
+                                        Text(capturedImage == nil ? "Take Picture" : "Retake Picture")
+                                            .padding()
+                                            .background(Color.blue)
+                                            .foregroundColor(.white)
+                                            .cornerRadius(10)
+                                    }
+                                }
+                                .sheet(isPresented: $isImagePickerPresented) {
+                                    ImagePicker(image: $capturedImage, sourceType: .camera)
+                                }
                             } else if [0, 1, 2, 3, 4, 6, 7, 8].contains(index) { // All questions now have audio recording
                                 VStack {
                                     HStack {
@@ -282,7 +308,7 @@ struct QuestionnaireView: View {
                             .cornerRadius(10)
                     }
                     .padding(.top)
-                    .disabled(selectedAnswers.contains(nil))
+                    .disabled(selectedAnswers.contains(nil) || capturedImage == nil)
                     
                     NavigationLink(destination: ResultView(score: score, resultMessage: resultMessage), isActive: $navigateToResult) {
                         EmptyView()
@@ -308,6 +334,39 @@ struct QuestionnaireView: View {
             return "Your memory is good, but there might be some room for improvement."
         } else {
             return "Consider doing some memory exercises to strengthen your memory."
+        }
+    }
+}
+
+struct ImagePicker: UIViewControllerRepresentable {
+    @Binding var image: UIImage?
+    let sourceType: UIImagePickerController.SourceType
+
+    func makeUIViewController(context: Context) -> UIImagePickerController {
+        let picker = UIImagePickerController()
+        picker.sourceType = sourceType
+        picker.delegate = context.coordinator
+        return picker
+    }
+
+    func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+
+    class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+        let parent: ImagePicker
+
+        init(_ parent: ImagePicker) {
+            self.parent = parent
+        }
+
+        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+            if let image = info[.originalImage] as? UIImage {
+                parent.image = image
+            }
+            picker.dismiss(animated: true)
         }
     }
 }
