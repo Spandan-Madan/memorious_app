@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		802465E32C6F1D05005BB1B4 /* YOLOv3.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 802465E22C6F1D05005BB1B4 /* YOLOv3.mlmodel */; };
+		802465E52C6FA63E005BB1B4 /* NewPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802465E42C6FA63E005BB1B4 /* NewPageView.swift */; };
+		807FA2AA2C6FB0D900A31009 /* ClockTestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807FA2A92C6FB0D900A31009 /* ClockTestView.swift */; };
 		809BC6D02C5A4C5B00D1AEEF /* V2App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 809BC6CF2C5A4C5B00D1AEEF /* V2App.swift */; };
 		809BC6D22C5A4C5B00D1AEEF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 809BC6D12C5A4C5B00D1AEEF /* ContentView.swift */; };
 		809BC6D42C5A4C5D00D1AEEF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 809BC6D32C5A4C5D00D1AEEF /* Assets.xcassets */; };
@@ -40,6 +42,8 @@
 
 /* Begin PBXFileReference section */
 		802465E22C6F1D05005BB1B4 /* YOLOv3.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = YOLOv3.mlmodel; sourceTree = "<group>"; };
+		802465E42C6FA63E005BB1B4 /* NewPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPageView.swift; sourceTree = "<group>"; };
+		807FA2A92C6FB0D900A31009 /* ClockTestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClockTestView.swift; sourceTree = "<group>"; };
 		809BC6CC2C5A4C5B00D1AEEF /* V2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = V2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		809BC6CF2C5A4C5B00D1AEEF /* V2App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = V2App.swift; sourceTree = "<group>"; };
 		809BC6D12C5A4C5B00D1AEEF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -110,7 +114,9 @@
 				802465E22C6F1D05005BB1B4 /* YOLOv3.mlmodel */,
 				809BC6F92C5A4C9900D1AEEF /* QuestionnaireView.swift */,
 				809BC6FD2C5A4D5400D1AEEF /* ChartView.swift */,
+				802465E42C6FA63E005BB1B4 /* NewPageView.swift */,
 				809BC6D32C5A4C5D00D1AEEF /* Assets.xcassets */,
+				807FA2A92C6FB0D900A31009 /* ClockTestView.swift */,
 				809BC6D52C5A4C5D00D1AEEF /* Preview Content */,
 			);
 			path = V2;
@@ -278,9 +284,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				802465E32C6F1D05005BB1B4 /* YOLOv3.mlmodel in Sources */,
+				802465E52C6FA63E005BB1B4 /* NewPageView.swift in Sources */,
 				809BC6D22C5A4C5B00D1AEEF /* ContentView.swift in Sources */,
 				809BC6FC2C5A4D0500D1AEEF /* ResultView.swift in Sources */,
 				809BC6D02C5A4C5B00D1AEEF /* V2App.swift in Sources */,
+				807FA2AA2C6FB0D900A31009 /* ClockTestView.swift in Sources */,
 				809BC6FE2C5A4D5400D1AEEF /* ChartView.swift in Sources */,
 				809BC6FA2C5A4C9900D1AEEF /* QuestionnaireView.swift in Sources */,
 			);

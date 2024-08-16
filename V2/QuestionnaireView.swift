@@ -127,7 +127,8 @@ struct QuestionnaireView: View {
     @State private var capturedImage: UIImage?
     @State private var detectedObjects: [String] = []
     @State private var showSubmitAlert = false
-
+    @State private var navigateToNewPage = false
+    
     let questions = [
         "What is today's date? (Day, Month, Year)",
         "What is the name of this place? (Current location)",
@@ -350,7 +351,8 @@ struct QuestionnaireView: View {
 
                     Button(action: {
                         print("Proceed button clicked")
-                        navigateToResult = true
+                        navigateToNewPage = true
+//                        navigateToResult = true
                     }) {
                         Text("Proceed")
                             .padding()
@@ -361,7 +363,7 @@ struct QuestionnaireView: View {
                     .padding(.top)
 
                     // NavigationLink to ResultView
-                    NavigationLink(destination: ResultView(score: score, resultMessage: resultMessage), isActive: $navigateToResult) {
+                    NavigationLink(destination: NewPageView(), isActive: $navigateToNewPage) {
                         EmptyView()
                     }
                 }
