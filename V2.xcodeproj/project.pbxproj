@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		802465E32C6F1D05005BB1B4 /* YOLOv3.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 802465E22C6F1D05005BB1B4 /* YOLOv3.mlmodel */; };
 		809BC6D02C5A4C5B00D1AEEF /* V2App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 809BC6CF2C5A4C5B00D1AEEF /* V2App.swift */; };
 		809BC6D22C5A4C5B00D1AEEF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 809BC6D12C5A4C5B00D1AEEF /* ContentView.swift */; };
 		809BC6D42C5A4C5D00D1AEEF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 809BC6D32C5A4C5D00D1AEEF /* Assets.xcassets */; };
@@ -38,6 +39,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		802465E22C6F1D05005BB1B4 /* YOLOv3.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = YOLOv3.mlmodel; sourceTree = "<group>"; };
 		809BC6CC2C5A4C5B00D1AEEF /* V2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = V2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		809BC6CF2C5A4C5B00D1AEEF /* V2App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = V2App.swift; sourceTree = "<group>"; };
 		809BC6D12C5A4C5B00D1AEEF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -105,6 +107,7 @@
 				809BC6CF2C5A4C5B00D1AEEF /* V2App.swift */,
 				809BC6D12C5A4C5B00D1AEEF /* ContentView.swift */,
 				809BC6FB2C5A4D0500D1AEEF /* ResultView.swift */,
+				802465E22C6F1D05005BB1B4 /* YOLOv3.mlmodel */,
 				809BC6F92C5A4C9900D1AEEF /* QuestionnaireView.swift */,
 				809BC6FD2C5A4D5400D1AEEF /* ChartView.swift */,
 				809BC6D32C5A4C5D00D1AEEF /* Assets.xcassets */,
@@ -274,6 +277,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				802465E32C6F1D05005BB1B4 /* YOLOv3.mlmodel in Sources */,
 				809BC6D22C5A4C5B00D1AEEF /* ContentView.swift in Sources */,
 				809BC6FC2C5A4D0500D1AEEF /* ResultView.swift in Sources */,
 				809BC6D02C5A4C5B00D1AEEF /* V2App.swift in Sources */,
