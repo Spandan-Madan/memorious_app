@@ -126,18 +126,19 @@ struct QuestionnaireView: View {
     @State private var isImagePickerPresented = false
     @State private var capturedImage: UIImage?
     @State private var detectedObjects: [String] = []
+    @State private var showSubmitAlert = false
 
     let questions = [
         "What is today's date? (Day, Month, Year)",
         "What is the name of this place? (Current location)",
-        "Please repeat these three words: Apple, Table, Penny.",
-        "Count backward from 100 by sevens (e.g., 93, 86, 79...).",
-        "What were the three words I asked you to remember?",
-        "Please name these objects: (Provide images or show objects).",
-        "Write a sentence of your choice.",
+        "Please remember these three words: Apple, Table, Penny. Now, read them aloud.",
+        "Count backward from 100 by fives (e.g., 100, 95, ...). Keep going till 75.",
+        "I'd like you to say as many words as you can starting with a letter of your choice. Once you start recording, you get 60 seconds to mention as many as you'd like.",
+        "Please name these objects:",
         "What is 7 + 8?",
-        "Repeat this phrase: 'No ifs, ands, or buts.'",
-        "Take a picture of a Triangle and upload a picture"
+        "I read some words to you earlier, which I asked you to remember. Tell me as many of those words as you can remember.",
+        "Repeat this phrase: 'Every day I find happiness and comfort.",
+        "Take a picture of a person around you."
     ]
     
     var body: some View {
@@ -199,10 +200,13 @@ struct QuestionnaireView: View {
                                                 playingQuestionIndex = index
 
                                                 // Set up transcription completion handler
-                                                speechRecognizer.transcriptionCompletion = { transcription in
-                                                    self.alertMessage = "Your transcription is: \(transcription)"
-                                                    self.showAlert = true
-                                                }
+//                                                speechRecognizer.transcriptionCompletion = { transcription in
+//                                                    print("Transcription received for index \(index): \(transcription)")
+//                                                    self.textResponses[index] = transcription
+//                                                    self.alertMessage = "Transcription received for index \(index): \(transcription)"
+////                                                    self.alertMessage = "Your transcription is: \(transcription)"
+//                                                    self.showAlert = true
+//                                                }
                                                 
                                                 // Transcribe the audio after starting playback
                                                 speechRecognizer.transcribeAudio(for: index)
@@ -288,6 +292,7 @@ struct QuestionnaireView: View {
 
                                                 // Set up transcription completion handler
                                                 speechRecognizer.transcriptionCompletion = { transcription in
+                                                    self.textResponses[index] = transcription
                                                     self.alertMessage = "Your transcription is: \(transcription)"
                                                     self.showAlert = true
                                                 }
@@ -312,11 +317,8 @@ struct QuestionnaireView: View {
                             }
                         }
                     }
-                    
                     Button(action: {
                         calculateScore()
-                        resultMessage = determineResultMessage(score)
-                        navigateToResult = true
                     }) {
                         Text("Submit")
                             .padding()
@@ -325,8 +327,40 @@ struct QuestionnaireView: View {
                             .cornerRadius(10)
                     }
                     .padding(.top)
-                    .disabled(selectedAnswers.contains(nil) || capturedImage == nil)
-                    
+//                    Button(action: {
+//                        // Check if the text at index 2 contains "cambridge"
+//                        let targetAnswer = "cambridge"
+//                        let userAnswer = textResponses[2].lowercased()
+//
+//                        if userAnswer.contains(targetAnswer) {
+//                            print("Correct")
+//                            print(textResponses)
+//                        } else {
+//                            print("Incorrect")
+//                            print(textResponses)
+//                        }
+//                    }) {
+//                        Text("Submit")
+//                            .padding()
+//                            .background(Color.blue)
+//                            .foregroundColor(.white)
+//                            .cornerRadius(10)
+//                    }
+//                    .padding(.top)
+
+                    Button(action: {
+                        print("Proceed button clicked")
+                        navigateToResult = true
+                    }) {
+                        Text("Proceed")
+                            .padding()
+                            .background(Color.green)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                    }
+                    .padding(.top)
+
+                    // NavigationLink to ResultView
                     NavigationLink(destination: ResultView(score: score, resultMessage: resultMessage), isActive: $navigateToResult) {
                         EmptyView()
                     }
@@ -341,8 +375,71 @@ struct QuestionnaireView: View {
     }
     
     func calculateScore() {
-        score = selectedAnswers.compactMap { $0 }.reduce(0, +)
+        score = 0 // Reset the score before calculating
+        
+        let answer1 = textResponses[0].lowercased()
+            let requiredWords1 = ["14", "august", "2024"]
+            if requiredWords1.allSatisfy(answer1.contains) {
+                score += 1
+            }
+        
+        // Check if the answer at index 2 contains "cambridge"
+        let answer2 = textResponses[1].lowercased()
+        if answer2.contains("cambridge") {
+            score += 1
+        }
+        
+        // Check if the answer at index 3 contains "apple"
+        let answer3 = textResponses[2].lowercased()
+        let requiredWords3 = ["apple", "table", "penny"]
+        if requiredWords3.allSatisfy(answer3.contains) {
+            score += 1
+        }
+        
+        let answer4 = textResponses[3].lowercased()
+        let requiredWords4 = ["95", "90", "85", "80", "75"]
+        if requiredWords4.allSatisfy(answer4.contains) {
+            score += 1
+        }
+        
+        let answer6 = textResponses[5].lowercased()
+        let requiredWords6 = ["cat", "coffee", "camera"]
+        if requiredWords6.allSatisfy(answer6.contains) {
+            score += 1
+        }
+        
+        let answer7 = textResponses[6].lowercased()
+        if answer7.contains("15") {
+            score += 1
+        }
+        
+        let answer8 = textResponses[7].lowercased()
+        let requiredWords8 = ["apple", "table", "penny"]
+        if requiredWords8.allSatisfy(answer8.contains) {
+            score += 1
+        }
+        
+        let answer9 = textResponses[8].lowercased()
+        let requiredWords9 = ["every", "day", "happiness", "comfort"]
+        if requiredWords9.allSatisfy(answer9.contains) {
+            score += 1
+        }
+        
+        /// Display final score in a dialog box
+        alertMessage = "Your final score is: \(score)"
+        showAlert = true
+        
+        // Log the final score
+        saveResult()
     }
+
+    func saveResult() {
+            let result = ["score": score, "date": Date()] as [String : Any]
+            var results = UserDefaults.standard.array(forKey: "TestResults") as? [[String: Any]] ?? []
+            results.append(result)
+            UserDefaults.standard.set(results, forKey: "TestResults")
+        }
+
     
     func determineResultMessage(_ score: Int) -> String {
         if score >= 8 {
