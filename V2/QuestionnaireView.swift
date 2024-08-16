@@ -3,6 +3,8 @@ import AVFoundation
 import SDWebImageSwiftUI
 import Speech
 import VisionKit
+import Vision
+import CoreML
 
 class AudioRecorder: ObservableObject {
     @Published var isRecording = false
@@ -123,6 +125,7 @@ struct QuestionnaireView: View {
     @State private var alertMessage = ""
     @State private var isImagePickerPresented = false
     @State private var capturedImage: UIImage?
+    @State private var detectedObjects: [String] = []
 
     let questions = [
         "What is today's date? (Day, Month, Year)",
@@ -221,6 +224,18 @@ struct QuestionnaireView: View {
                                             .resizable()
                                             .scaledToFit()
                                             .frame(height: 200)
+                                        
+                                        // Display detected objects
+                                        if !detectedObjects.isEmpty {
+                                            VStack(alignment: .leading) {
+                                                Text("Detected Objects:")
+                                                    .font(.headline)
+                                                ForEach(detectedObjects, id: \.self) { object in
+                                                    Text(object)
+                                                }
+                                            }
+                                            .padding(.top)
+                                        }
                                     }
                                     
                                     Button(action: {
@@ -234,7 +249,9 @@ struct QuestionnaireView: View {
                                     }
                                 }
                                 .sheet(isPresented: $isImagePickerPresented) {
-                                    ImagePicker(image: $capturedImage, sourceType: .camera)
+                                    ImagePicker(image: $capturedImage, sourceType: .camera) { image in
+                                        detectObjects(in: image)
+                                    }
                                 }
                             } else if [0, 1, 2, 3, 4, 6, 7, 8].contains(index) { // All questions now have audio recording
                                 VStack {
@@ -336,11 +353,53 @@ struct QuestionnaireView: View {
             return "Consider doing some memory exercises to strengthen your memory."
         }
     }
+    
+    func detectObjects(in image: UIImage) {
+        guard let model = try? VNCoreMLModel(for: YOLOv3().model) else {
+            print("Failed to load Core ML model")
+            return
+        }
+        
+        let request = VNCoreMLRequest(model: model) { request, error in
+            if let error = error {
+                print("Failed to detect objects: \(error.localizedDescription)")
+                return
+            }
+            
+            guard let results = request.results as? [VNRecognizedObjectObservation] else {
+                print("Unexpected result type from VNCoreMLRequest")
+                return
+            }
+            
+            DispatchQueue.main.async {
+                if results.isEmpty {
+                    self.alertMessage = "No objects detected."
+                } else {
+                    self.detectedObjects = results.map { result in
+                        return "\(result.labels.first?.identifier ?? "unknown object") with confidence: \(result.confidence)"
+                    }
+                    self.alertMessage = "Objects detected. Check the list below."
+                }
+                self.showAlert = true
+            }
+        }
+        
+        let handler = VNImageRequestHandler(cgImage: image.cgImage!, options: [:])
+        DispatchQueue.global(qos: .userInteractive).async {
+            do {
+                try handler.perform([request])
+            } catch {
+                print("Failed to perform object detection: \(error.localizedDescription)")
+            }
+        }
+    }
 }
+
 
 struct ImagePicker: UIViewControllerRepresentable {
     @Binding var image: UIImage?
     let sourceType: UIImagePickerController.SourceType
+    let onImagePicked: (UIImage) -> Void
 
     func makeUIViewController(context: Context) -> UIImagePickerController {
         let picker = UIImagePickerController()
@@ -365,6 +424,7 @@ struct ImagePicker: UIViewControllerRepresentable {
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
             if let image = info[.originalImage] as? UIImage {
                 parent.image = image
+                parent.onImagePicked(image) // Call the callback
             }
             picker.dismiss(animated: true)
         }
