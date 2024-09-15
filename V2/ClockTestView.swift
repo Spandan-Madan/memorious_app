@@ -1,23 +1,40 @@
 import SwiftUI
+import UIKit
+
+extension UIApplication {
+    func endEditing(_ force: Bool = false) {
+        self.windows
+            .filter { $0.isKeyWindow }
+            .first?
+            .endEditing(force)
+    }
+    
+    func presentAlert(title: String, message: String, on viewController: UIViewController) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        viewController.present(alert, animated: true, completion: nil)
+    }
+}
 
 struct ClockTestView: View {
     @State private var positions: [String] = Array(repeating: "", count: 12)
     @State private var currentTime = Date()
+    @State private var gtPositions = ["12", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"]
+    @State private var score = 0
     
     let circleSize: CGFloat = 300
     let textBoxSize: CGFloat = 40
     
     @Environment(\.colorScheme) var colorScheme
+    @Environment(\.presentationMode) var presentationMode
     
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
+    @FocusState private var focusedField: Int?
+
     var body: some View {
         GeometryReader { geometry in
             VStack {
-                Text("Complete the clock by adding numbers around.")
-                    .font(.largeTitle)
-                    .padding(.top)
-                
                 ZStack {
                     // Background Circle (Clock Face)
                     Circle()
@@ -44,12 +61,29 @@ struct ClockTestView: View {
                             .background(Color(UIColor.systemBackground))
                             .overlay(Circle().stroke(Color.primary, lineWidth: 3))
                             .position(positionForItem(at: index, in: CGSize(width: circleSize, height: circleSize)))
+                            .focused($focusedField, equals: index)
+                            .onSubmit {
+                                if index < 11 {
+                                    focusedField = index + 1
+                                } else {
+                                    focusedField = nil
+                                    UIApplication.shared.endEditing() // Dismiss keyboard
+                                }
+                            }
                     }
                 }
                 .frame(width: circleSize, height: circleSize)
                 .padding()
                 
-                Button(action: printText) {
+                Text("Complete the clock by adding numbers.")
+                    .font(.headline)
+                    .padding(.top)
+                
+                Spacer()
+                Spacer()
+                Spacer()
+                
+                Button(action: submit) {
                     Text("Submit")
                         .font(.title2)
                         .padding()
@@ -59,10 +93,13 @@ struct ClockTestView: View {
                 }
                 .padding(.top, 20)
                 
-                Spacer()
+//                Spacer()
             }
             .frame(width: geometry.size.width)
             .padding()
+            .onAppear {
+                focusedField = 0 // Start focus on the first position
+            }
         }
         .ignoresSafeArea(.keyboard, edges: .bottom)
         .navigationBarHidden(true)
@@ -87,10 +124,24 @@ struct ClockTestView: View {
         return CGPoint(x: x, y: y)
     }
     
-    func printText() {
-        for (index, position) in positions.enumerated() {
-            print("Position \(index + 1): \(position)")
+    func submit() {
+        printText()
+        
+        // Present the alert
+        if let viewController = UIApplication.shared.keyWindow?.rootViewController {
+            UIApplication.shared.presentAlert(title: "Score", message: "Your score is \(score)", on: viewController)
         }
+    }
+    
+    func printText() {
+        print(positions)
+        score = 0 // Reset score before calculation
+        for i in 0..<positions.count {
+            if positions[i] == gtPositions[i] {
+                score += 1
+            }
+        }
+        print(score) // For debugging
     }
 }
 

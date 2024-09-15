@@ -5,7 +5,7 @@ import VisionKit
 
 struct ContentView: View {
     @State private var navigateToQuestionnaire = false
-    @State private var navigateToChartView = false
+    @State private var navigateToCognitiveAssessment = false
     @State private var chartScores: [(Int, Date)] = []
     @State private var showAlert = false
     @State private var alertMessage = ""
@@ -30,38 +30,41 @@ struct ContentView: View {
                         .font(.title)
                         .fontWeight(.bold)
                     
-                    Text("We hope to assist your memory loss with AI.")
+                    Text("Asisting memory loss with AI.")
                         .font(.subheadline)
                         .foregroundColor(.gray)
                     
                     Spacer()
                     
-                    Button(action: {
-                        requestPermissions {
-                            loadChartData()
-                            navigateToChartView = true
-                        }
-                    }) {
-                        Text("Progress Report")
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color.gray.opacity(0.2))
-                            .foregroundColor(.black)
-                            .cornerRadius(10)
-                    }
+                    
                     
                     Button(action: {
                         requestPermissions {
                             navigateToQuestionnaire = true
                         }
                     }) {
-                        Text("Launch Memory Test")
+                        Text("Launch Screening Test")
                             .frame(maxWidth: .infinity)
                             .padding()
                             .background(Color.gray.opacity(0.2))
                             .foregroundColor(.black)
                             .cornerRadius(10)
                     }
+                    
+                    Button(action: {
+                        requestPermissions {
+//                            loadChartData()
+                            navigateToCognitiveAssessment = true
+                        }
+                    }) {
+                        Text("NeuroPsychological Assessment")
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.gray.opacity(0.2))
+                            .foregroundColor(.black)
+                            .cornerRadius(10)
+                    }
+                    
                 }
                 .padding()
                 .alert(isPresented: $showAlert) {
@@ -78,7 +81,7 @@ struct ContentView: View {
                 }
             )
             .background(
-                NavigationLink(destination: ChartView(scores: chartScores), isActive: $navigateToChartView) {
+                NavigationLink(destination: StoryView(), isActive: $navigateToCognitiveAssessment) {
                     EmptyView()
                 }
             )

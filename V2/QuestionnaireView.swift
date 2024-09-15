@@ -111,7 +111,7 @@ class SpeechRecognizer: ObservableObject {
 }
 
 struct QuestionnaireView: View {
-    @State private var selectedAnswers: [Int?] = Array(repeating: nil, count: 11)
+    @State private var selectedAnswers: [Int?] = Array(repeating: nil, count: 14)
     @State private var navigateToResult = false
     @State private var score: Int = 0
     @State private var resultMessage: String = ""
@@ -120,7 +120,7 @@ struct QuestionnaireView: View {
     @StateObject private var speechRecognizer = SpeechRecognizer()
     @State private var recordingQuestionIndex: Int? = nil
     @State private var playingQuestionIndex: Int? = nil
-    @State private var textResponses: [String] = Array(repeating: "", count: 11)
+    @State private var textResponses: [String] = Array(repeating: "", count: 14)
     @State private var showAlert = false
     @State private var alertMessage = ""
     @State private var isImagePickerPresented = false
@@ -128,18 +128,22 @@ struct QuestionnaireView: View {
     @State private var detectedObjects: [String] = []
     @State private var showSubmitAlert = false
     @State private var navigateToNewPage = false
+    @State private var proceedAfterAlert = false
     
     let questions = [
         "What is today's date? (Day, Month, Year)",
-        "What is the name of this place? (Current location)",
-        "Please remember these three words: Apple, Table, Penny. Now, read them aloud.",
-        "Count backward from 100 by fives (e.g., 100, 95, ...). Keep going till 75.",
+        "What is the name of the city we are in?",
+        "Please remember these three words: Face, Velvet, Church, Daisy, Red. Now, read them aloud.",
+        "Count backward from 100 by sevens (e.g., 100, 93, ...). Keep going till 65.",
         "I'd like you to say as many words as you can starting with a letter of your choice. Once you start recording, you get 60 seconds to mention as many as you'd like.",
         "Please name these objects:",
         "What is 7 + 8?",
         "I read some words to you earlier, which I asked you to remember. Tell me as many of those words as you can remember.",
-        "Repeat this phrase: 'Every day I find happiness and comfort.",
-        "Take a picture of a person around you."
+        "Repeat this phrase: 'I only know that John is the one to help today.",
+        "Repeat this phrase: 'The cat always hid under the couch when dogs were in the room.'",
+        "What is the similarity between a banana and an orange?",
+        "What is the similarity between a train and a bicycle?"
+        // "Take a picture of a person around you."
     ]
     
     var body: some View {
@@ -168,12 +172,24 @@ struct QuestionnaireView: View {
                                             .resizable()
                                             .frame(width: 100, height: 100)
                                     }
+//                                    Spacer()
+                                    
                                     HStack {
                                         Spacer()
                                         Button(action: {
                                             if audioRecorder.isRecording && recordingQuestionIndex == index {
                                                 audioRecorder.stopRecording()
                                                 recordingQuestionIndex = nil
+                                                
+                                                // Set up transcription completion handler
+                                                speechRecognizer.transcriptionCompletion = { transcription in
+                                                    self.textResponses[index] = transcription
+                                                    self.alertMessage = "Your transcription is: \(transcription)"
+                                                    self.showAlert = false
+                                                }
+                                                
+                                                // Transcribe the audio after stopping recording
+                                                speechRecognizer.transcribeAudio(for: index)
                                             } else {
                                                 if audioRecorder.isRecording {
                                                     audioRecorder.stopRecording()
@@ -188,7 +204,10 @@ struct QuestionnaireView: View {
                                                 .foregroundColor(.white)
                                                 .cornerRadius(10)
                                         }
+                                        
                                         Spacer()
+                                        Spacer()
+                                        
                                         Button(action: {
                                             if audioPlayer.isPlaying && playingQuestionIndex == index {
                                                 audioPlayer.stopPlayback()
@@ -199,30 +218,18 @@ struct QuestionnaireView: View {
                                                 }
                                                 audioPlayer.startPlayback(for: index)
                                                 playingQuestionIndex = index
-
-                                                // Set up transcription completion handler
-//                                                speechRecognizer.transcriptionCompletion = { transcription in
-//                                                    print("Transcription received for index \(index): \(transcription)")
-//                                                    self.textResponses[index] = transcription
-//                                                    self.alertMessage = "Transcription received for index \(index): \(transcription)"
-////                                                    self.alertMessage = "Your transcription is: \(transcription)"
-//                                                    self.showAlert = true
-//                                                }
-                                                
-                                                // Transcribe the audio after starting playback
-                                                speechRecognizer.transcribeAudio(for: index)
                                             }
                                         }) {
                                             Text(audioPlayer.isPlaying && playingQuestionIndex == index ? "Stop Playback" : "Play Recording")
                                                 .padding()
-                                                .background(Color.green)
+                                                .background(Color.yellow)
                                                 .foregroundColor(.white)
                                                 .cornerRadius(10)
                                         }
                                         Spacer()
                                     }
                                 }
-                            } else if index == 9 { // New camera question
+                            } else if index == 13 { // New camera question
                                 VStack {
                                     if let image = capturedImage {
                                         Image(uiImage: image)
@@ -258,13 +265,24 @@ struct QuestionnaireView: View {
                                         detectObjects(in: image)
                                     }
                                 }
-                            } else if [0, 1, 2, 3, 4, 6, 7, 8].contains(index) { // All questions now have audio recording
+                            } else if [0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12].contains(index) { // All questions now have audio recording
                                 VStack {
                                     HStack {
+                                        Spacer()
                                         Button(action: {
                                             if audioRecorder.isRecording && recordingQuestionIndex == index {
                                                 audioRecorder.stopRecording()
                                                 recordingQuestionIndex = nil
+                                                
+                                                // Set up transcription completion handler
+                                                speechRecognizer.transcriptionCompletion = { transcription in
+                                                    self.textResponses[index] = transcription
+                                                    self.alertMessage = "Your transcription is: \(transcription)"
+                                                    self.showAlert = false
+                                                }
+                                                
+                                                // Transcribe the audio after stopping recording
+                                                speechRecognizer.transcribeAudio(for: index)
                                             } else {
                                                 if audioRecorder.isRecording {
                                                     audioRecorder.stopRecording()
@@ -280,6 +298,9 @@ struct QuestionnaireView: View {
                                                 .cornerRadius(10)
                                         }
                                         
+                                        Spacer()
+                                        Spacer()
+                                        
                                         Button(action: {
                                             if audioPlayer.isPlaying && playingQuestionIndex == index {
                                                 audioPlayer.stopPlayback()
@@ -291,23 +312,16 @@ struct QuestionnaireView: View {
                                                 audioPlayer.startPlayback(for: index)
                                                 playingQuestionIndex = index
 
-                                                // Set up transcription completion handler
-                                                speechRecognizer.transcriptionCompletion = { transcription in
-                                                    self.textResponses[index] = transcription
-                                                    self.alertMessage = "Your transcription is: \(transcription)"
-                                                    self.showAlert = true
-                                                }
-                                                
-                                                // Transcribe the audio after starting playback
-                                                speechRecognizer.transcribeAudio(for: index)
+                                                // Transcription is not handled here
                                             }
                                         }) {
                                             Text(audioPlayer.isPlaying && playingQuestionIndex == index ? "Stop Playback" : "Play Recording")
                                                 .padding()
-                                                .background(Color.green)
+                                                .background(Color.yellow)
                                                 .foregroundColor(.white)
                                                 .cornerRadius(10)
                                         }
+                                    Spacer()
                                     }
                                     .padding(.top)
                                 }
@@ -318,120 +332,147 @@ struct QuestionnaireView: View {
                             }
                         }
                     }
+                    Text("When you're done, please press show score.")
+                        .font(.headline)
+                        .padding(.bottom)
                     Button(action: {
                         calculateScore()
+                        proceedAfterAlert = true
+                        showAlert = true
                     }) {
-                        Text("Submit")
-                            .padding()
-                            .background(Color.blue)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                    }
-                    .padding(.top)
-//                    Button(action: {
-//                        // Check if the text at index 2 contains "cambridge"
-//                        let targetAnswer = "cambridge"
-//                        let userAnswer = textResponses[2].lowercased()
-//
-//                        if userAnswer.contains(targetAnswer) {
-//                            print("Correct")
-//                            print(textResponses)
-//                        } else {
-//                            print("Incorrect")
-//                            print(textResponses)
-//                        }
-//                    }) {
-//                        Text("Submit")
-//                            .padding()
-//                            .background(Color.blue)
-//                            .foregroundColor(.white)
-//                            .cornerRadius(10)
-//                    }
-//                    .padding(.top)
-
-                    Button(action: {
-                        print("Proceed button clicked")
-                        navigateToNewPage = true
-//                        navigateToResult = true
-                    }) {
-                        Text("Proceed")
+                        Text("Score and Proceed")
                             .padding()
                             .background(Color.green)
                             .foregroundColor(.white)
                             .cornerRadius(10)
-                    }
-                    .padding(.top)
+                    }.padding(.top)
 
-                    // NavigationLink to ResultView
-                    NavigationLink(destination: NewPageView(), isActive: $navigateToNewPage) {
+                    // NavigationLink to NewPageView
+                    NavigationLink(destination: VisuoSpatialView(), isActive: $navigateToNewPage) {
                         EmptyView()
                     }
                 }
                 .padding()
                 .alert(isPresented: $showAlert) {
-                    Alert(title: Text("Transcription"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
+                    Alert(title: Text("Transcription"), message: Text(alertMessage), dismissButton: .default(Text("OK")) {
+                        if proceedAfterAlert {
+                            navigateToNewPage = true
+                        }
+                    })
                 }
             }
-            .navigationBarTitle("Questionnaire", displayMode: .inline)
         }
     }
+                        
     
     func calculateScore() {
         score = 0 // Reset the score before calculating
+        let currentDate = Date()
+        let dateFormatter = DateFormatter()
+
+        // Extract the day
+        dateFormatter.dateFormat = "d"
+        let dayString = dateFormatter.string(from: currentDate)
+
+        // Extract the month
+        dateFormatter.dateFormat = "MMMM"
+        let monthString = dateFormatter.string(from: currentDate).lowercased()
+
+        // Extract the year
+        dateFormatter.dateFormat = "yyyy"
+        let yearString = dateFormatter.string(from: currentDate)
+        print(dayString)
+        print(monthString)
+        print(yearString)
         
         let answer1 = textResponses[0].lowercased()
-            let requiredWords1 = ["14", "august", "2024"]
+            let requiredWords1 = [dayString, monthString, yearString]
             if requiredWords1.allSatisfy(answer1.contains) {
                 score += 1
+                print("date found")
+            }
+            else{
+                print("date not found")
             }
         
         // Check if the answer at index 2 contains "cambridge"
         let answer2 = textResponses[1].lowercased()
-        if answer2.contains("cambridge") {
+        if answer2.contains("cambridge") || answer2.contains("boston")  {
             score += 1
+            print("city correct")
         }
         
         // Check if the answer at index 3 contains "apple"
         let answer3 = textResponses[2].lowercased()
-        let requiredWords3 = ["apple", "table", "penny"]
+        let requiredWords3 = ["face", "velvet", "church", "daisy", "red"]
         if requiredWords3.allSatisfy(answer3.contains) {
             score += 1
+            print("correct words")
         }
         
         let answer4 = textResponses[3].lowercased()
-        let requiredWords4 = ["95", "90", "85", "80", "75"]
+        let requiredWords4 = ["93", "86", "79", "72", "65"]
         if requiredWords4.allSatisfy(answer4.contains) {
             score += 1
+            print("correct counting")
         }
         
         let answer6 = textResponses[5].lowercased()
         let requiredWords6 = ["cat", "coffee", "camera"]
         if requiredWords6.allSatisfy(answer6.contains) {
             score += 1
+            print("correct recognition")
         }
         
         let answer7 = textResponses[6].lowercased()
         if answer7.contains("15") {
             score += 1
+            print("correct addition")
         }
         
         let answer8 = textResponses[7].lowercased()
-        let requiredWords8 = ["apple", "table", "penny"]
+        let requiredWords8 = ["face", "velvet", "church", "daisy", "red"]
         if requiredWords8.allSatisfy(answer8.contains) {
             score += 1
+            print("correct remembering")
         }
         
         let answer9 = textResponses[8].lowercased()
-        let requiredWords9 = ["every", "day", "happiness", "comfort"]
+        let requiredWords9 = ["john", "one", "help", "today"]
         if requiredWords9.allSatisfy(answer9.contains) {
             score += 1
+            print("correct phrase")
+        }
+        
+        let answer10 = textResponses[9].lowercased()
+        let requiredWords10 = ["cat", "always", "hid", "couch", "dog","room"]
+        if requiredWords10.allSatisfy(answer10.contains) {
+            score += 1
+            print("correct phrase")
+        }
+        
+        let answer11 = textResponses[10].lowercased()
+        let requiredWords11 = ["fruit"]
+        if requiredWords11.allSatisfy(answer11.contains) {
+            score += 1
+            print("correct phrase")
+        }
+        
+        let answer12 = textResponses[11].lowercased()
+        if answer12.contains("transport") || answer2.contains("travel")  {
+            score += 1
+            print("correct phrase")
         }
         
         /// Display final score in a dialog box
-        alertMessage = "Your final score is: \(score)"
+        if score >= 7 {
+            alertMessage =  "Your Score is: \(score). Great job! You have a strong memory."
+        } else if score >= 5 {
+            alertMessage = "Your Score is: \(score). Your memory is good, but there might be some room for improvement."
+        } else {
+            alertMessage = "Your Score is: \(score). Consider doing some memory exercises to strengthen your memory."
+        }
         showAlert = true
-        
-        // Log the final score
         saveResult()
     }
 

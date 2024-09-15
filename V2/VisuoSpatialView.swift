@@ -1,10 +1,10 @@
 import SwiftUI
 
-struct NewPageView: View {
+struct VisuoSpatialView: View {
     var body: some View {
         NavigationView {
             VStack {
-                Text("Visuo-Spatial Task")
+                Text("Welcome to the Visual Spatial Task")
                     .font(.title)
                     .padding()
                 
@@ -27,7 +27,6 @@ struct NewPageView: View {
                 }
                 .padding(.bottom, 20)
             }
-            .navigationTitle("New Task")
         }
     }
 }
@@ -114,8 +113,8 @@ struct CircleButtonView: View {
     }
 }
 
-struct NewPageView_Previews: PreviewProvider {
+struct VisuoSpatialView_Previews: PreviewProvider {
     static var previews: some View {
-        NewPageView()
+        VisuoSpatialView()
     }
 }
