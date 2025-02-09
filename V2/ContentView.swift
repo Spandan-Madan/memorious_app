@@ -2,14 +2,31 @@ import SwiftUI
 import AVFoundation
 import Speech
 import VisionKit
+import FirebaseAuth
+import GoogleSignIn
 
 struct ContentView: View {
+    @EnvironmentObject var authViewModel: AuthViewModel
+    
+    // Navigation states
     @State private var navigateToQuestionnaire = false
     @State private var navigateToCognitiveAssessment = false
+    @State private var navigateToMemoryBot = false
+    
+    // For chart data
     @State private var chartScores: [(Int, Date)] = []
+    
+    // Alert states
     @State private var showAlert = false
     @State private var alertMessage = ""
-
+    
+    // Track whether the user has Drive access
+    @State private var hasDriveAccess = UserDefaults.standard.bool(forKey: "hasDriveAccess")
+    
+    var userName: String {
+        Auth.auth().currentUser?.displayName ?? "User"
+    }
+    
     var body: some View {
         NavigationView {
             ZStack {
@@ -26,24 +43,23 @@ struct ContentView: View {
                                 .fill(Color.white)
                         )
                     
-                    Text("Welcome,\n Spandan.")
-                        .font(.title)
-                        .fontWeight(.bold)
-                    
-                    Text("Asisting memory loss with AI.")
+                    Text("All your memories. In one place.")
                         .font(.subheadline)
                         .foregroundColor(.gray)
                     
                     Spacer()
+                    Spacer()
                     
-                    
+                    Text("Welcome,\n\(userName).")
+                        .font(.title)
+                        .fontWeight(.bold)
                     
                     Button(action: {
                         requestPermissions {
-                            navigateToQuestionnaire = true
+                            navigateToMemoryBot = true
                         }
                     }) {
-                        Text("Launch Screening Test")
+                        Text("Search your memories")
                             .frame(maxWidth: .infinity)
                             .padding()
                             .background(Color.gray.opacity(0.2))
@@ -51,20 +67,37 @@ struct ContentView: View {
                             .cornerRadius(10)
                     }
                     
+                    // Connect Google Drive Button
+                    // Always interactive Google Drive Button
                     Button(action: {
-                        requestPermissions {
-//                            loadChartData()
-                            navigateToCognitiveAssessment = true
-                        }
+                        requestDriveAccess()
                     }) {
-                        Text("NeuroPsychological Assessment")
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color.gray.opacity(0.2))
-                            .foregroundColor(.black)
-                            .cornerRadius(10)
+                        HStack {
+                            Text(hasDriveAccess ? "Refresh Google connection" : "Connect Google Drive and Mail")
+                            if hasDriveAccess {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .foregroundColor(.green)
+                            }
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.blue.opacity(0.2))
+                        .foregroundColor(.blue)
+                        .cornerRadius(10)
                     }
                     
+                    // Logout Button
+                    Button(action: {
+                        authViewModel.signOut()
+                    }) {
+                        Text("Logout")
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.black.opacity(0.8))
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                    }
+                    .padding(.top, -10)
                 }
                 .padding()
                 .alert(isPresented: $showAlert) {
@@ -76,18 +109,31 @@ struct ContentView: View {
             .navigationTitle("")
             .navigationBarHidden(true)
             .background(
-                NavigationLink(destination: QuestionnaireView(), isActive: $navigateToQuestionnaire) {
+                NavigationLink(destination: DemoAudioUploadView(),
+                               isActive: $navigateToQuestionnaire) {
                     EmptyView()
                 }
             )
             .background(
-                NavigationLink(destination: StoryView(), isActive: $navigateToCognitiveAssessment) {
+                NavigationLink(destination: DemoAudioUploadView(),
+                               isActive: $navigateToCognitiveAssessment) {
+                    EmptyView()
+                }
+            )
+            .background(
+                NavigationLink(destination: DemoAudioUploadView(),
+                               isActive: $navigateToMemoryBot) {
                     EmptyView()
                 }
             )
         }
+        .onAppear {
+            loadChartData()
+            checkDriveAccess()
+        }
     }
     
+    // MARK: - Load chart data
     func loadChartData() {
         let results = UserDefaults.standard.array(forKey: "TestResults") as? [[String: Any]] ?? []
         chartScores = results.compactMap { result in
@@ -98,8 +144,23 @@ struct ContentView: View {
         }
     }
     
+    // MARK: - Check Drive Access
+    private func checkDriveAccess() {
+        if let user = GIDSignIn.sharedInstance.currentUser,
+           let grantedScopes = user.grantedScopes,
+           grantedScopes.contains("https://www.googleapis.com/auth/drive.readonly") {
+            self.hasDriveAccess = true
+            UserDefaults.standard.set(true, forKey: "hasDriveAccess")
+        } else {
+            self.hasDriveAccess = false
+            UserDefaults.standard.set(false, forKey: "hasDriveAccess")
+        }
+    }
+    
+    // MARK: - Request Permissions (Microphone, Speech, Camera)
     private func requestPermissions(completion: @escaping () -> Void) {
         #if targetEnvironment(simulator)
+        // Simulator: auto-approve
         print("Simulator detected: granting permissions automatically.")
         DispatchQueue.main.async {
             completion()
@@ -156,14 +217,94 @@ struct ContentView: View {
         }
     }
     
-    private func requestVisionPermission(completion: @escaping (Bool) -> Void) {
-        // No explicit VisionKit permission needed; ensure camera/photo library access is granted
-        completion(true)
+    private func sendGoogleTokenToBackend(user: GIDGoogleUser) {
+            // Get access token
+            let accessToken = user.accessToken.tokenString
+            
+            // Prepare the URL
+            guard let url = URL(string: "http:/3.144.183.101:6820/googletoken") else {
+                print("Invalid URL")
+                return
+            }
+            
+            // Prepare the request
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            
+            // Prepare the body
+            let body: [String: Any] = [
+                "google_token": accessToken,
+                "user_id": Auth.auth().currentUser?.uid ?? ""
+            ]
+            
+            do {
+                request.httpBody = try JSONSerialization.data(withJSONObject: body)
+            } catch {
+                print("Failed to serialize request body: \(error)")
+                return
+            }
+            
+            // Make the request
+            URLSession.shared.dataTask(with: request) { data, response, error in
+                if let error = error {
+                    print("Failed to send token: \(error)")
+                    return
+                }
+                
+                guard let httpResponse = response as? HTTPURLResponse else {
+                    print("Invalid response")
+                    return
+                }
+                
+                if httpResponse.statusCode == 200 {
+                    print("Successfully sent Google token to backend")
+                } else {
+                    print("Failed to send token. Status code: \(httpResponse.statusCode)")
+                }
+            }.resume()
+        }
+    
+    // MARK: - Request Google Drive Access
+    private func requestDriveAccess() {
+        guard let rootViewController = UIApplication
+            .shared
+            .connectedScenes
+            .compactMap({ $0 as? UIWindowScene })
+            .flatMap({ $0.windows })
+            .first(where: \.isKeyWindow)?
+            .rootViewController else {
+                print("No root view controller found.")
+                return
+        }
+        
+        // Always request a fresh token
+        GIDSignIn.sharedInstance.signIn(
+            withPresenting: rootViewController,
+            hint: nil,
+            additionalScopes: ["https://www.googleapis.com/auth/drive.readonly","https://www.googleapis.com/auth/gmail.readonly"]
+        ) { signInResult, error in
+            if let error = error {
+                print("Failed to add Drive scope: \(error.localizedDescription)")
+                return
+            }
+            
+            if let signedInUser = signInResult?.user,
+               let grantedScopes = signedInUser.grantedScopes,
+               grantedScopes.contains("https://www.googleapis.com/auth/drive.readonly") {
+                print("Drive access granted.")
+                self.hasDriveAccess = true
+                UserDefaults.standard.set(true, forKey: "hasDriveAccess")
+                sendGoogleTokenToBackend(user: signedInUser)
+            }
+        }
     }
 }
 
+// MARK: - Preview
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+            .environmentObject(AuthViewModel())
     }
 }
