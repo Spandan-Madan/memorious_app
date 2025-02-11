@@ -222,7 +222,8 @@ struct ContentView: View {
             let accessToken = user.accessToken.tokenString
             
             // Prepare the URL
-            guard let url = URL(string: "http:/3.144.183.101:6820/googletoken") else {
+//            guard let url = URL(string: "http:/3.144.183.101:6820/googletoken") else {
+        guard let url = URL(string: "https://api.memoriousai.com/userquery") else {
                 print("Invalid URL")
                 return
             }
