@@ -42,7 +42,8 @@ struct MessageBubble: View {
 struct MessagingHelper {
     /// Sends a message query to the server.
     static func sendMessageToServer(query: String, userUID: String, completion: @escaping (Result<String, Error>) -> Void) {
-        guard let url = URL(string: "http://3.144.183.101:6820/userquery") else {
+//        guard let url = URL(string: "http://3.144.183.101:6820/userquery") else {
+        guard let url = URL(string: "https://api.memoriousai.com/userquery") else {
             completion(.failure(NSError(domain: "Invalid URL", code: -1)))
             return
         }
@@ -62,13 +63,19 @@ struct MessagingHelper {
             request.httpMethod = "POST"
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             
-            // Include query, user UID, JWT, and fixed user secret
-            let body: [String: Any] = [
-                "query": query,
-                "user_uid": userUID,
-                "jwt": idToken,
-                "user_secret": "abc123xyz"
-            ]
+            var body: [String: Any] = [:] // Declare body outside
+
+            if let userSecret = KeychainHelper.getKey(for: userUID) {
+                body = [
+                    "query": query,
+                    "user_uid": userUID,
+                    "jwt": idToken,
+                    "user_secret": userSecret.base64EncodedString() // Convert Data to Base64 string
+                ]
+            } else {
+                print("Error: No secret key found in Keychain for user \(userUID)")
+                return // Exit if no key is found
+            }
             
             do {
                 let jsonData = try JSONSerialization.data(withJSONObject: body)

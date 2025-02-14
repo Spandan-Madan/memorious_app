@@ -2,6 +2,7 @@ import SwiftUI
 import GoogleSignIn
 import GoogleSignInSwift
 import FirebaseAuth
+import Security
 
 class AuthViewModel: ObservableObject {
     @Published var isAuthenticated = false
@@ -34,6 +35,17 @@ class AuthViewModel: ObservableObject {
             }
         } catch {
             print("Error signing out: \(error.localizedDescription)")
+        }
+    }
+    
+    func generateAndStoreSecretKey(for userID: String) {
+        let existingKey = KeychainHelper.getKey(for: userID)
+        if existingKey == nil {
+            let newKey = KeychainHelper.generateRandomKey()
+            KeychainHelper.storeKey(newKey, for: userID)
+            print("New secret key generated and stored for user: \(userID)")
+        } else {
+            print("Existing secret key found for user: \(userID)")
         }
     }
 }
@@ -96,6 +108,11 @@ struct LoginView: View {
                 if let error = error {
                     print("Firebase Sign-In failed: \(error.localizedDescription)")
                     return
+                }
+                
+                if let userID = result?.user.uid {
+                    let authViewModel = AuthViewModel()
+                    authViewModel.generateAndStoreSecretKey(for: userID)
                 }
                 
                 DispatchQueue.main.async {

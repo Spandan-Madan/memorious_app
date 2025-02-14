@@ -173,7 +173,8 @@ class AudioUploadManager: ObservableObject {
             }
             
             // Prepare the URLRequest for your server.
-            let url = URL(string: "http://3.144.183.101:6820/upload")!
+//            let url = URL(string: "http://3.144.183.101:6820/upload")!
+            let url = URL(string: "https://api.memoriousai.com/upload")!
             var request = URLRequest(url: url)
             request.httpMethod = "POST"
             
