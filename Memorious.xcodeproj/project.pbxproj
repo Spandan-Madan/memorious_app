@@ -54,12 +54,12 @@
 		805A59ED2D4629AC00566A08 /* DemoAudioUploadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoAudioUploadView.swift; sourceTree = "<group>"; };
 		808E85CE2D500CF200E659BA /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		808E85D62D500F5900E659BA /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		809BC6CC2C5A4C5B00D1AEEF /* V2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = V2.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		809BC6CC2C5A4C5B00D1AEEF /* Memorious.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Memorious.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		809BC6CF2C5A4C5B00D1AEEF /* V2App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = V2App.swift; sourceTree = "<group>"; };
 		809BC6D12C5A4C5B00D1AEEF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		809BC6DC2C5A4C5D00D1AEEF /* V2Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = V2Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		809BC6DC2C5A4C5D00D1AEEF /* MemoriousTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MemoriousTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		809BC6E02C5A4C5D00D1AEEF /* V2Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = V2Tests.swift; sourceTree = "<group>"; };
-		809BC6E62C5A4C5D00D1AEEF /* V2UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = V2UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		809BC6E62C5A4C5D00D1AEEF /* MemoriousUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MemoriousUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		809BC6EA2C5A4C5D00D1AEEF /* V2UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = V2UITests.swift; sourceTree = "<group>"; };
 		809BC6EC2C5A4C5D00D1AEEF /* V2UITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = V2UITestsLaunchTests.swift; sourceTree = "<group>"; };
 		80E5D74B2D5595FC00EB8311 /* Assets 2.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Assets 2.xcassets"; sourceTree = "<group>"; };
@@ -111,9 +111,9 @@
 		809BC6CD2C5A4C5B00D1AEEF /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				809BC6CC2C5A4C5B00D1AEEF /* V2.app */,
-				809BC6DC2C5A4C5D00D1AEEF /* V2Tests.xctest */,
-				809BC6E62C5A4C5D00D1AEEF /* V2UITests.xctest */,
+				809BC6CC2C5A4C5B00D1AEEF /* Memorious.app */,
+				809BC6DC2C5A4C5D00D1AEEF /* MemoriousTests.xctest */,
+				809BC6E62C5A4C5D00D1AEEF /* MemoriousUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -155,9 +155,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		809BC6CB2C5A4C5B00D1AEEF /* V2 */ = {
+		809BC6CB2C5A4C5B00D1AEEF /* Memorious */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 809BC6F02C5A4C5D00D1AEEF /* Build configuration list for PBXNativeTarget "V2" */;
+			buildConfigurationList = 809BC6F02C5A4C5D00D1AEEF /* Build configuration list for PBXNativeTarget "Memorious" */;
 			buildPhases = (
 				809BC6C82C5A4C5B00D1AEEF /* Sources */,
 				809BC6C92C5A4C5B00D1AEEF /* Frameworks */,
@@ -167,7 +167,7 @@
 			);
 			dependencies = (
 			);
-			name = V2;
+			name = Memorious;
 			packageProductDependencies = (
 				809BC7002C5B5CE600D1AEEF /* SDWebImageSwiftUI */,
 				808E85C52D500B6000E659BA /* FirebaseAuth */,
@@ -179,12 +179,12 @@
 				808E85D82D50100B00E659BA /* FirebaseCore */,
 			);
 			productName = V2;
-			productReference = 809BC6CC2C5A4C5B00D1AEEF /* V2.app */;
+			productReference = 809BC6CC2C5A4C5B00D1AEEF /* Memorious.app */;
 			productType = "com.apple.product-type.application";
 		};
-		809BC6DB2C5A4C5D00D1AEEF /* V2Tests */ = {
+		809BC6DB2C5A4C5D00D1AEEF /* MemoriousTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 809BC6F32C5A4C5D00D1AEEF /* Build configuration list for PBXNativeTarget "V2Tests" */;
+			buildConfigurationList = 809BC6F32C5A4C5D00D1AEEF /* Build configuration list for PBXNativeTarget "MemoriousTests" */;
 			buildPhases = (
 				809BC6D82C5A4C5D00D1AEEF /* Sources */,
 				809BC6D92C5A4C5D00D1AEEF /* Frameworks */,
@@ -195,14 +195,14 @@
 			dependencies = (
 				809BC6DE2C5A4C5D00D1AEEF /* PBXTargetDependency */,
 			);
-			name = V2Tests;
+			name = MemoriousTests;
 			productName = V2Tests;
-			productReference = 809BC6DC2C5A4C5D00D1AEEF /* V2Tests.xctest */;
+			productReference = 809BC6DC2C5A4C5D00D1AEEF /* MemoriousTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		809BC6E52C5A4C5D00D1AEEF /* V2UITests */ = {
+		809BC6E52C5A4C5D00D1AEEF /* MemoriousUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 809BC6F62C5A4C5D00D1AEEF /* Build configuration list for PBXNativeTarget "V2UITests" */;
+			buildConfigurationList = 809BC6F62C5A4C5D00D1AEEF /* Build configuration list for PBXNativeTarget "MemoriousUITests" */;
 			buildPhases = (
 				809BC6E22C5A4C5D00D1AEEF /* Sources */,
 				809BC6E32C5A4C5D00D1AEEF /* Frameworks */,
@@ -213,9 +213,9 @@
 			dependencies = (
 				809BC6E82C5A4C5D00D1AEEF /* PBXTargetDependency */,
 			);
-			name = V2UITests;
+			name = MemoriousUITests;
 			productName = V2UITests;
-			productReference = 809BC6E62C5A4C5D00D1AEEF /* V2UITests.xctest */;
+			productReference = 809BC6E62C5A4C5D00D1AEEF /* MemoriousUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -241,7 +241,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 809BC6C72C5A4C5B00D1AEEF /* Build configuration list for PBXProject "V2" */;
+			buildConfigurationList = 809BC6C72C5A4C5B00D1AEEF /* Build configuration list for PBXProject "Memorious" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -259,9 +259,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				809BC6CB2C5A4C5B00D1AEEF /* V2 */,
-				809BC6DB2C5A4C5D00D1AEEF /* V2Tests */,
-				809BC6E52C5A4C5D00D1AEEF /* V2UITests */,
+				809BC6CB2C5A4C5B00D1AEEF /* Memorious */,
+				809BC6DB2C5A4C5D00D1AEEF /* MemoriousTests */,
+				809BC6E52C5A4C5D00D1AEEF /* MemoriousUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -329,12 +329,12 @@
 /* Begin PBXTargetDependency section */
 		809BC6DE2C5A4C5D00D1AEEF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 809BC6CB2C5A4C5B00D1AEEF /* V2 */;
+			target = 809BC6CB2C5A4C5B00D1AEEF /* Memorious */;
 			targetProxy = 809BC6DD2C5A4C5D00D1AEEF /* PBXContainerItemProxy */;
 		};
 		809BC6E82C5A4C5D00D1AEEF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 809BC6CB2C5A4C5B00D1AEEF /* V2 */;
+			target = 809BC6CB2C5A4C5B00D1AEEF /* Memorious */;
 			targetProxy = 809BC6E72C5A4C5D00D1AEEF /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -543,7 +543,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/V2.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/V2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Memorious.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Memorious";
 			};
 			name = Debug;
 		};
@@ -563,7 +563,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/V2.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/V2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Memorious.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Memorious";
 			};
 			name = Release;
 		};
@@ -606,7 +606,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		809BC6C72C5A4C5B00D1AEEF /* Build configuration list for PBXProject "V2" */ = {
+		809BC6C72C5A4C5B00D1AEEF /* Build configuration list for PBXProject "Memorious" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				809BC6EE2C5A4C5D00D1AEEF /* Debug */,
@@ -615,7 +615,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		809BC6F02C5A4C5D00D1AEEF /* Build configuration list for PBXNativeTarget "V2" */ = {
+		809BC6F02C5A4C5D00D1AEEF /* Build configuration list for PBXNativeTarget "Memorious" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				809BC6F12C5A4C5D00D1AEEF /* Debug */,
@@ -624,7 +624,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		809BC6F32C5A4C5D00D1AEEF /* Build configuration list for PBXNativeTarget "V2Tests" */ = {
+		809BC6F32C5A4C5D00D1AEEF /* Build configuration list for PBXNativeTarget "MemoriousTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				809BC6F42C5A4C5D00D1AEEF /* Debug */,
@@ -633,7 +633,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		809BC6F62C5A4C5D00D1AEEF /* Build configuration list for PBXNativeTarget "V2UITests" */ = {
+		809BC6F62C5A4C5D00D1AEEF /* Build configuration list for PBXNativeTarget "MemoriousUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				809BC6F72C5A4C5D00D1AEEF /* Debug */,
