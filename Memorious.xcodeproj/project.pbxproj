@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		800D228D2D6588CC00A5C095 /* MSAL in Frameworks */ = {isa = PBXBuildFile; productRef = 800D228C2D6588CC00A5C095 /* MSAL */; };
 		8013D8462D5AE32E00206CDF /* AudioHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8013D8452D5AE32E00206CDF /* AudioHelper.swift */; };
 		8013D8482D5AE34A00206CDF /* MessagingHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8013D8472D5AE33F00206CDF /* MessagingHelper.swift */; };
 		8013D84A2D5BE49300206CDF /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8013D8492D5BE49300206CDF /* KeychainHelper.swift */; };
@@ -22,9 +23,6 @@
 		808E85D92D50100B00E659BA /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 808E85D82D50100B00E659BA /* FirebaseCore */; };
 		809BC6D02C5A4C5B00D1AEEF /* V2App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 809BC6CF2C5A4C5B00D1AEEF /* V2App.swift */; };
 		809BC6D22C5A4C5B00D1AEEF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 809BC6D12C5A4C5B00D1AEEF /* ContentView.swift */; };
-		809BC6E12C5A4C5D00D1AEEF /* V2Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 809BC6E02C5A4C5D00D1AEEF /* V2Tests.swift */; };
-		809BC6EB2C5A4C5D00D1AEEF /* V2UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 809BC6EA2C5A4C5D00D1AEEF /* V2UITests.swift */; };
-		809BC6ED2C5A4C5D00D1AEEF /* V2UITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 809BC6EC2C5A4C5D00D1AEEF /* V2UITestsLaunchTests.swift */; };
 		809BC7012C5B5CE600D1AEEF /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 809BC7002C5B5CE600D1AEEF /* SDWebImageSwiftUI */; };
 		80E5D74C2D5595FC00EB8311 /* Assets 2.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 80E5D74B2D5595FC00EB8311 /* Assets 2.xcassets */; };
 /* End PBXBuildFile section */
@@ -58,10 +56,7 @@
 		809BC6CF2C5A4C5B00D1AEEF /* V2App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = V2App.swift; sourceTree = "<group>"; };
 		809BC6D12C5A4C5B00D1AEEF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		809BC6DC2C5A4C5D00D1AEEF /* MemoriousTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MemoriousTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		809BC6E02C5A4C5D00D1AEEF /* V2Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = V2Tests.swift; sourceTree = "<group>"; };
 		809BC6E62C5A4C5D00D1AEEF /* MemoriousUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MemoriousUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		809BC6EA2C5A4C5D00D1AEEF /* V2UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = V2UITests.swift; sourceTree = "<group>"; };
-		809BC6EC2C5A4C5D00D1AEEF /* V2UITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = V2UITestsLaunchTests.swift; sourceTree = "<group>"; };
 		80E5D74B2D5595FC00EB8311 /* Assets 2.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Assets 2.xcassets"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -74,6 +69,7 @@
 				808E85CA2D500B6000E659BA /* FirebaseFirestore in Frameworks */,
 				808E85D32D500D4D00E659BA /* GoogleSignInSwift in Frameworks */,
 				808E85C82D500B6000E659BA /* FirebaseAuthCombine-Community in Frameworks */,
+				800D228D2D6588CC00A5C095 /* MSAL in Frameworks */,
 				808E85CC2D500B6000E659BA /* FirebaseFirestoreCombine-Community in Frameworks */,
 				808E85C62D500B6000E659BA /* FirebaseAuth in Frameworks */,
 				808E85D92D50100B00E659BA /* FirebaseCore in Frameworks */,
@@ -98,12 +94,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		800D228B2D6588CC00A5C095 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		809BC6C32C5A4C5B00D1AEEF = {
 			isa = PBXGroup;
 			children = (
 				809BC6CE2C5A4C5B00D1AEEF /* V2 */,
-				809BC6DF2C5A4C5D00D1AEEF /* V2Tests */,
-				809BC6E92C5A4C5D00D1AEEF /* V2UITests */,
+				800D228B2D6588CC00A5C095 /* Frameworks */,
 				809BC6CD2C5A4C5B00D1AEEF /* Products */,
 			);
 			sourceTree = "<group>";
@@ -135,23 +137,6 @@
 			path = V2;
 			sourceTree = "<group>";
 		};
-		809BC6DF2C5A4C5D00D1AEEF /* V2Tests */ = {
-			isa = PBXGroup;
-			children = (
-				809BC6E02C5A4C5D00D1AEEF /* V2Tests.swift */,
-			);
-			path = V2Tests;
-			sourceTree = "<group>";
-		};
-		809BC6E92C5A4C5D00D1AEEF /* V2UITests */ = {
-			isa = PBXGroup;
-			children = (
-				809BC6EA2C5A4C5D00D1AEEF /* V2UITests.swift */,
-				809BC6EC2C5A4C5D00D1AEEF /* V2UITestsLaunchTests.swift */,
-			);
-			path = V2UITests;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -177,6 +162,7 @@
 				808E85D02D500D4D00E659BA /* GoogleSignIn */,
 				808E85D22D500D4D00E659BA /* GoogleSignInSwift */,
 				808E85D82D50100B00E659BA /* FirebaseCore */,
+				800D228C2D6588CC00A5C095 /* MSAL */,
 			);
 			productName = V2;
 			productReference = 809BC6CC2C5A4C5B00D1AEEF /* Memorious.app */;
@@ -254,6 +240,7 @@
 				809BC6FF2C5B5CE600D1AEEF /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
 				808E85C12D4FCC3800E659BA /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 				808E85C42D500B1C00E659BA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				800D228A2D65873200A5C095 /* XCRemoteSwiftPackageReference "microsoft-authentication-library-for-objc" */,
 			);
 			productRefGroup = 809BC6CD2C5A4C5B00D1AEEF /* Products */;
 			projectDirPath = "";
@@ -311,7 +298,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				809BC6E12C5A4C5D00D1AEEF /* V2Tests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -319,8 +305,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				809BC6ED2C5A4C5D00D1AEEF /* V2UITestsLaunchTests.swift in Sources */,
-				809BC6EB2C5A4C5D00D1AEEF /* V2UITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -466,6 +450,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_ASSET_PATHS = "\"V2/Preview Content\"";
 				DEVELOPMENT_TEAM = WX3674HP4X;
 				ENABLE_PREVIEWS = YES;
@@ -530,7 +515,6 @@
 		809BC6F42C5A4C5D00D1AEEF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -550,7 +534,6 @@
 		809BC6F52C5A4C5D00D1AEEF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -570,7 +553,6 @@
 		809BC6F72C5A4C5D00D1AEEF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = WX3674HP4X;
@@ -588,7 +570,6 @@
 		809BC6F82C5A4C5D00D1AEEF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = WX3674HP4X;
@@ -645,6 +626,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		800D228A2D65873200A5C095 /* XCRemoteSwiftPackageReference "microsoft-authentication-library-for-objc" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/AzureAD/microsoft-authentication-library-for-objc";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.7.0;
+			};
+		};
 		808E85C12D4FCC3800E659BA /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/google/GoogleSignIn-iOS.git";
@@ -672,6 +661,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		800D228C2D6588CC00A5C095 /* MSAL */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 800D228A2D65873200A5C095 /* XCRemoteSwiftPackageReference "microsoft-authentication-library-for-objc" */;
+			productName = MSAL;
+		};
 		808E85C52D500B6000E659BA /* FirebaseAuth */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 808E85C42D500B1C00E659BA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;

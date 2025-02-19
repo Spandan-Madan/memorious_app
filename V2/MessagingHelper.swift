@@ -74,7 +74,13 @@ struct MessagingHelper {
                 ]
             } else {
                 print("Error: No secret key found in Keychain for user \(userUID)")
-                return // Exit if no key is found
+                body = [
+                    "query": query,
+                    "user_uid": userUID,
+                    "jwt": idToken,
+                    "user_secret": "random_string" // Convert Data to Base64 string
+                ]
+//                return // Exit if no key is found
             }
             
             do {

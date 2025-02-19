@@ -1,5 +1,5 @@
 {
-  "originHash" : "69cf26182302fe2d1c698bf86d64241a8bfc6f912b3cf507858c9926b004dcbd",
+  "originHash" : "3dbe4303ac7b9127e105b5c7ef109b25ad8ff0eb364b543567d370749d4dcb0a",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -116,6 +116,15 @@
       "state" : {
         "revision" : "a0bc79961d7be727d258d33d5a6b2f1023270ba1",
         "version" : "1.22.5"
+      }
+    },
+    {
+      "identity" : "microsoft-authentication-library-for-objc",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/AzureAD/microsoft-authentication-library-for-objc",
+      "state" : {
+        "revision" : "8f966b3c88bf0c4b32cd1ab706d7d674b6fdf528",
+        "version" : "1.7.0"
       }
     },
     {
