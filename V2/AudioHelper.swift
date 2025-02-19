@@ -172,8 +172,11 @@ class AudioUploadManager: ObservableObject {
                 return
             }
             
+            // Retrieve user ID and passphrase.
+            let userID = Auth.auth().currentUser?.uid ?? "tempUserID"
+            let passphrase = KeychainHelper.getPassphrase(for: userID) ?? ""
+            print("passphrase found for user \(passphrase)")
             // Prepare the URLRequest for your server.
-//            let url = URL(string: "http://3.144.183.101:6820/upload")!
             let url = URL(string: "https://api.memoriousai.com/upload")!
             var request = URLRequest(url: url)
             request.httpMethod = "POST"
@@ -184,18 +187,22 @@ class AudioUploadManager: ObservableObject {
             
             // Build the multipart form body.
             var body = Data()
+            // Add recordingId field.
             body.append("--\(boundary)\r\n".data(using: .utf8)!)
             body.append("Content-Disposition: form-data; name=\"recordingId\"\r\n\r\n".data(using: .utf8)!)
             body.append("\(recordingId)\r\n".data(using: .utf8)!)
             
+            // Add jwt field.
             body.append("--\(boundary)\r\n".data(using: .utf8)!)
             body.append("Content-Disposition: form-data; name=\"jwt\"\r\n\r\n".data(using: .utf8)!)
             body.append("\(idToken)\r\n".data(using: .utf8)!)
             
+            // Add passphrase field (the user’s set passphrase).
             body.append("--\(boundary)\r\n".data(using: .utf8)!)
-            body.append("Content-Disposition: form-data; name=\"user_secret\"\r\n\r\n".data(using: .utf8)!)
-            body.append("abc123xyz\r\n".data(using: .utf8)!)
+            body.append("Content-Disposition: form-data; name=\"passphrase\"\r\n\r\n".data(using: .utf8)!)
+            body.append("\(passphrase)\r\n".data(using: .utf8)!)
             
+            // Add the audio file.
             body.append("--\(boundary)\r\n".data(using: .utf8)!)
             body.append("Content-Disposition: form-data; name=\"file\"; filename=\"audio.m4a\"\r\n".data(using: .utf8)!)
             body.append("Content-Type: audio/m4a\r\n\r\n".data(using: .utf8)!)

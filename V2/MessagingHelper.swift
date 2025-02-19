@@ -65,12 +65,13 @@ struct MessagingHelper {
             
             var body: [String: Any] = [:] // Declare body outside
 
-            if let userSecret = KeychainHelper.getKey(for: userUID) {
+            if let userSecret = KeychainHelper.getPassphrase(for: userUID) {
+                print("Secret key found in Keychain for user \(userSecret)")
                 body = [
                     "query": query,
                     "user_uid": userUID,
                     "jwt": idToken,
-                    "user_secret": userSecret.base64EncodedString() // Convert Data to Base64 string
+                    "passphrase": userSecret
                 ]
             } else {
                 print("Error: No secret key found in Keychain for user \(userUID)")
@@ -78,7 +79,7 @@ struct MessagingHelper {
                     "query": query,
                     "user_uid": userUID,
                     "jwt": idToken,
-                    "user_secret": "random_string" // Convert Data to Base64 string
+                    "passphrase": userUID
                 ]
 //                return // Exit if no key is found
             }

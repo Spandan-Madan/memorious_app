@@ -1,7 +1,7 @@
 import SwiftUI
 import FirebaseAuth
 
-struct DemoAudioUploadView: View {
+struct MemoriesView: View {
     @StateObject private var audioRecorder = AudioRecorder()
     @StateObject private var uploadManager = AudioUploadManager()
     
@@ -221,8 +221,8 @@ struct DemoAudioUploadView: View {
     }
 }
 
-struct DemoAudioUploadView_Previews: PreviewProvider {
+struct MemoriesView_Previews: PreviewProvider {
     static var previews: some View {
-        DemoAudioUploadView()
+        MemoriesView()
     }
 }

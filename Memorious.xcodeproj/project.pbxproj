@@ -8,10 +8,16 @@
 
 /* Begin PBXBuildFile section */
 		800D228D2D6588CC00A5C095 /* MSAL in Frameworks */ = {isa = PBXBuildFile; productRef = 800D228C2D6588CC00A5C095 /* MSAL */; };
+		800D228F2D65AB7900A5C095 /* DeleteKeychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 800D228E2D65AB7400A5C095 /* DeleteKeychain.swift */; };
+		800D22952D664F1600A5C095 /* GoogleSignInManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 800D22942D664F1600A5C095 /* GoogleSignInManager.swift */; };
+		800D22972D664F2A00A5C095 /* OfficeSignInManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 800D22962D664F2A00A5C095 /* OfficeSignInManager.swift */; };
+		800D22992D664F3F00A5C095 /* SlackSignInManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 800D22982D664F3F00A5C095 /* SlackSignInManager.swift */; };
+		800D229B2D66614800A5C095 /* PassphraseSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 800D229A2D66614800A5C095 /* PassphraseSetupView.swift */; };
+		800D229D2D66698700A5C095 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 800D229C2D66698700A5C095 /* AuthViewModel.swift */; };
 		8013D8462D5AE32E00206CDF /* AudioHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8013D8452D5AE32E00206CDF /* AudioHelper.swift */; };
 		8013D8482D5AE34A00206CDF /* MessagingHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8013D8472D5AE33F00206CDF /* MessagingHelper.swift */; };
 		8013D84A2D5BE49300206CDF /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8013D8492D5BE49300206CDF /* KeychainHelper.swift */; };
-		805A59EE2D4629AC00566A08 /* DemoAudioUploadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805A59ED2D4629AC00566A08 /* DemoAudioUploadView.swift */; };
+		805A59EE2D4629AC00566A08 /* MemoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805A59ED2D4629AC00566A08 /* MemoriesView.swift */; };
 		808E85C62D500B6000E659BA /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 808E85C52D500B6000E659BA /* FirebaseAuth */; };
 		808E85C82D500B6000E659BA /* FirebaseAuthCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 808E85C72D500B6000E659BA /* FirebaseAuthCombine-Community */; };
 		808E85CA2D500B6000E659BA /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 808E85C92D500B6000E659BA /* FirebaseFirestore */; };
@@ -45,11 +51,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		800D228E2D65AB7400A5C095 /* DeleteKeychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteKeychain.swift; sourceTree = "<group>"; };
+		800D22942D664F1600A5C095 /* GoogleSignInManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleSignInManager.swift; sourceTree = "<group>"; };
+		800D22962D664F2A00A5C095 /* OfficeSignInManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfficeSignInManager.swift; sourceTree = "<group>"; };
+		800D22982D664F3F00A5C095 /* SlackSignInManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlackSignInManager.swift; sourceTree = "<group>"; };
+		800D229A2D66614800A5C095 /* PassphraseSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassphraseSetupView.swift; sourceTree = "<group>"; };
+		800D229C2D66698700A5C095 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
 		8013D8452D5AE32E00206CDF /* AudioHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioHelper.swift; sourceTree = "<group>"; };
 		8013D8472D5AE33F00206CDF /* MessagingHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagingHelper.swift; sourceTree = "<group>"; };
 		8013D8492D5BE49300206CDF /* KeychainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainHelper.swift; sourceTree = "<group>"; };
 		80270FD02D480C8A00A86376 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		805A59ED2D4629AC00566A08 /* DemoAudioUploadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoAudioUploadView.swift; sourceTree = "<group>"; };
+		805A59ED2D4629AC00566A08 /* MemoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoriesView.swift; sourceTree = "<group>"; };
 		808E85CE2D500CF200E659BA /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		808E85D62D500F5900E659BA /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		809BC6CC2C5A4C5B00D1AEEF /* Memorious.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Memorious.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -123,6 +135,7 @@
 		809BC6CE2C5A4C5B00D1AEEF /* V2 */ = {
 			isa = PBXGroup;
 			children = (
+				800D228E2D65AB7400A5C095 /* DeleteKeychain.swift */,
 				8013D8472D5AE33F00206CDF /* MessagingHelper.swift */,
 				80E5D74B2D5595FC00EB8311 /* Assets 2.xcassets */,
 				80270FD02D480C8A00A86376 /* Info.plist */,
@@ -130,9 +143,14 @@
 				809BC6D12C5A4C5B00D1AEEF /* ContentView.swift */,
 				808E85D62D500F5900E659BA /* GoogleService-Info.plist */,
 				808E85CE2D500CF200E659BA /* LoginView.swift */,
-				805A59ED2D4629AC00566A08 /* DemoAudioUploadView.swift */,
+				805A59ED2D4629AC00566A08 /* MemoriesView.swift */,
 				8013D8452D5AE32E00206CDF /* AudioHelper.swift */,
 				8013D8492D5BE49300206CDF /* KeychainHelper.swift */,
+				800D22942D664F1600A5C095 /* GoogleSignInManager.swift */,
+				800D22962D664F2A00A5C095 /* OfficeSignInManager.swift */,
+				800D22982D664F3F00A5C095 /* SlackSignInManager.swift */,
+				800D229A2D66614800A5C095 /* PassphraseSetupView.swift */,
+				800D229C2D66698700A5C095 /* AuthViewModel.swift */,
 			);
 			path = V2;
 			sourceTree = "<group>";
@@ -287,9 +305,15 @@
 				8013D8482D5AE34A00206CDF /* MessagingHelper.swift in Sources */,
 				809BC6D22C5A4C5B00D1AEEF /* ContentView.swift in Sources */,
 				809BC6D02C5A4C5B00D1AEEF /* V2App.swift in Sources */,
-				805A59EE2D4629AC00566A08 /* DemoAudioUploadView.swift in Sources */,
+				805A59EE2D4629AC00566A08 /* MemoriesView.swift in Sources */,
 				8013D84A2D5BE49300206CDF /* KeychainHelper.swift in Sources */,
 				808E85CF2D500CF200E659BA /* LoginView.swift in Sources */,
+				800D22952D664F1600A5C095 /* GoogleSignInManager.swift in Sources */,
+				800D228F2D65AB7900A5C095 /* DeleteKeychain.swift in Sources */,
+				800D22992D664F3F00A5C095 /* SlackSignInManager.swift in Sources */,
+				800D22972D664F2A00A5C095 /* OfficeSignInManager.swift in Sources */,
+				800D229B2D66614800A5C095 /* PassphraseSetupView.swift in Sources */,
+				800D229D2D66698700A5C095 /* AuthViewModel.swift in Sources */,
 				8013D8462D5AE32E00206CDF /* AudioHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
